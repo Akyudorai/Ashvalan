@@ -9,12 +9,17 @@ public class PlayerController : MonoBehaviour
     public Animator anim;
     public Rigidbody2D rb;
 
+    // - Object References
+    public GameObject fireBlast_prefab;
+
     // - Internal Variables
     public float MotionX;
     public bool CanMove = true;
     public float MoveSpeed = 1.5f;
-
+    
     public float dashPower = 5f; 
+
+
 
     public void Move(InputAction.CallbackContext context) 
     {
@@ -99,10 +104,9 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetTrigger("Chain");
             StartCoroutine(AnimationDelay());
-        }
-            
+        }       
     }
-
+    
     // - ASSIGNED TO ABILITY 3
     public void SpellAttack(InputAction.CallbackContext context) 
     {
