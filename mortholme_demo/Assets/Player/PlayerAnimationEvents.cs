@@ -124,7 +124,7 @@ public class PlayerAnimationEvents : MonoBehaviour
         foreach (var hit in foundColliders) 
         {
 
-            if (hit.tag == "Player")
+            if (hit.tag == "Hero")
             {   
                 // - Instantiate time-delayed Flame Burst at their location
                 // -- TODO: Instantiate based on velocity / motion of the target rather than exact position
@@ -137,7 +137,7 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Player")
+        if (col.gameObject.tag == "Hero")
         {
             switch (animationState)
             {

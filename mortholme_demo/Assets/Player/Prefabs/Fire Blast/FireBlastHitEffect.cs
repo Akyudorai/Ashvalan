@@ -11,7 +11,7 @@ public class FireBlastHitEffect : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Player")
+        if (col.gameObject.tag == "Hero")
         {
             // - Deal Damage
         

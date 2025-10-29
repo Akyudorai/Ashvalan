@@ -67,6 +67,7 @@ public class PlayerController : MonoBehaviour
         if (context.performed) 
         {
             anim.SetTrigger("Attack");
+            PlayerInputTracker.SubmitInput(2);
             StartCoroutine(AnimationDelay());
         }
             
@@ -78,6 +79,7 @@ public class PlayerController : MonoBehaviour
         if (context.performed)
         {
             anim.SetTrigger("Spear");
+            PlayerInputTracker.SubmitInput(3);
             StartCoroutine(AnimationDelay());
         }            
     }
@@ -103,6 +105,7 @@ public class PlayerController : MonoBehaviour
         if (context.performed)
         {
             anim.SetTrigger("Chain");
+            PlayerInputTracker.SubmitInput(4);
             StartCoroutine(AnimationDelay());
         }       
     }
@@ -113,6 +116,7 @@ public class PlayerController : MonoBehaviour
         if (context.performed)
         {
             anim.SetTrigger("Spell");
+            PlayerInputTracker.SubmitInput(5);
             StartCoroutine(AnimationDelay());
         }
             
@@ -124,6 +128,7 @@ public class PlayerController : MonoBehaviour
         if (context.performed)
         {
             anim.SetTrigger("Buff");
+            PlayerInputTracker.SubmitInput(6);
             StartCoroutine(AnimationDelay());
         }
             
