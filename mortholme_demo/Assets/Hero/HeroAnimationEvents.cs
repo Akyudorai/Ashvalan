@@ -31,16 +31,17 @@ public class HeroAnimationEvents : MonoBehaviour
         targetsHit.Add(hit);
 
         // - Deal Damage
-        // float damage = 0;
-        // if (index == 1) damage = 1;
-        // if (index == 2) damage = 2;
-        // if (index == 3) damage = 3;       
+        float damage = 0;
+        if (index == 1) damage = 1;
+        if (index == 2) damage = 2;
+        if (index == 3) damage = 3;
+        hit.GetComponent<HealthScript>().DealDamage(damage);
     }
 
     public void EndAttack(int i)
     {
         // - Is it safe to attack again?  
-        int playerState = hero.player_anim.GetInteger("AnimState");
+        int playerState = hero.pc.GetComponentInChildren<PlayerAnimationEvents>().animationState;
         if (playerState != 2 && playerState != 3 && playerState != 4 && playerState != 5)
         {
             Debug.LogWarning("HERO: Seems to be safe to continue attacking!");
@@ -61,8 +62,13 @@ public class HeroAnimationEvents : MonoBehaviour
         {
             // - Calculate Threat from current attack animation
             Debug.LogWarning("HERO: I'm in danger. Switching to retreat mode!");
-            hero.ChangeState(HeroState.RETREAT);
+            hero.ChangeState(HeroState.EVADE);
         }
+    }
+
+    public void StopDodgeRoll()
+    {
+        hero.StopDodgeRoll();
     }
 
     public void OnTriggerEnter2D(Collider2D col)

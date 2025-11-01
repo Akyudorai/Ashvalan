@@ -19,6 +19,7 @@ public enum HeroAnimation
 public enum HeroState
 { 
     IDLE,
+    MOVING,
     CHASE,
     RETREAT,
     EVADE,
@@ -34,6 +35,7 @@ public class HeroBehavior : MonoBehaviour
     // - Component References
     public Animator anim;
     public Rigidbody2D rigid;
+    public HealthScript health;
 
     // - Object References
     public Transform groundCheckPoint;
@@ -44,21 +46,52 @@ public class HeroBehavior : MonoBehaviour
     public float MotionX;
     public bool CanMove = true;
     public float MoveSpeed = 1.5f;
-    public float dashPower = 5f;
+    public float rollPower = 5f;
+    public Vector3 targetMoveDestination;
 
     // - State System Variables
     public HeroState currentState = HeroState.IDLE;
+    
 
     // - Combat Variables
     public float meleeDistance = 3f;
     public float safeRangedDistance = 10f;
     public int attackCombo = 0;
     public bool isAttacking = false;
+    public bool isBlocking = false;
+    public bool isDead = false;
+    public bool isStunned = false;
+    public bool isRolling = false;
 
+    private void OnEnable()
+    {
+        health.OnDeath += OnDeath;
+        PlayerAnimationEvents.OnAttackAnimation += RespondToAttack;
+    }
 
+    private void OnDisable()
+    {
+        health.OnDeath -= OnDeath;
+        PlayerAnimationEvents.OnAttackAnimation -= RespondToAttack;
+    }
 
     private void Update() 
     {
+        if (isDead) return;
+
+        // - Check for Grounded State
+        GroundCheck();
+
+        // - Update the rigidbody Y velocity float within the animator controller in real-time  
+        anim.SetFloat("AirSpeedY", rigid.linearVelocity.y);
+
+        // - Update Animator Parameters
+        HandleAnimator();
+
+
+        // - If Stunned or Dead, do not perform any action
+        if (isStunned || isRolling) return;
+
         // - If motion input is detected, move the player accordingly.
         if (MotionX != 0 && CanMove)
             transform.position += transform.right * MotionX * MoveSpeed * Time.deltaTime;
@@ -71,15 +104,6 @@ public class HeroBehavior : MonoBehaviour
 
         // - AI Behavior
         StateBehavior();
-
-        // - Update Animator Parameters
-        HandleAnimator();
-
-        // - Check for Grounded State
-        GroundCheck();
-
-        // - Update the rigidbody Y velocity float within the animator controller in real-time  
-        anim.SetFloat("AirSpeedY", rigid.linearVelocity.y);   
     }
 
     private void GroundCheck() 
@@ -91,24 +115,173 @@ public class HeroBehavior : MonoBehaviour
 
     private void StateBehavior()
     {
+        AnyState();
         IdleState();
         ChaseState();
         RetreatState();
         AttackState();
+        MovingState();
+        EvadeState();
     }
 
 
     // --------------------------------------------------------------------------------------------------------------
 
+    #region AI Responses
+
+    private void RespondToAttack(string phase, float impactTime)
+    {
+        if (phase == "Threat")
+        {            
+            if (impactTime > 0.3f && distanceToPlayer < 5f)
+            {
+                // - Dodge Roll
+                DodgeRoll();
+            }
+
+            else if (impactTime <= 0.3f && distanceToPlayer < 5f)
+            {
+                // - Block
+                Block();
+            }
+
+            else if (distanceToPlayer > 5f || impactTime > 0.7f || !nearLeftEdge || !nearRightEdge)
+            {
+                // - Switch to Evasion State to prepare for delayed reaction rather than instant reaction
+                ChangeState(HeroState.EVADE);
+
+                //// - Calculate Safe Spot
+                //Vector3 direction = (player.transform.position + transform.position).normalized;               
+                //Vector3 newPosition = new Vector3(((direction.x < 0) ? -1 : 1) *Mathf.Ceil(Mathf.Abs(direction.x)) * MoveSpeed, transform.position.y, transform.position.z);
+
+                //// - Walk Away
+                //targetMoveDestination = newPosition;
+                //ChangeState(HeroState.MOVING);
+            }
+        }
+
+        else if (phase == "Recovery")
+        {
+            ChangeState(HeroState.CHASE);
+        }
+    }    
+
+    private void OnDeath()
+    {
+        ChangeState(HeroState.DEAD);
+        gameObject.layer = LayerMask.NameToLayer("Dodge");
+    }
+
+    #endregion
+
+
+    // --------------------------------------------------------------------------------------------------------------
+
+    #region State System
+
+    // - Change State
+    public void ChangeState(HeroState newState)
+    {
+        ExitState(currentState);
+        EnterState(newState);
+    }
+
+    private void EnterState(HeroState state)
+    {
+        currentState = state;
+
+        switch (state)
+        {
+            case HeroState.IDLE:
+                MotionX = 0;
+                break;
+            case HeroState.MOVING:
+                break;
+            case HeroState.CHASE:
+                break;
+            case HeroState.RETREAT:
+                break;
+            case HeroState.ATTACK:
+                MotionX = 0;
+                isAttacking = false;
+                attackCombo = 0;
+                break;
+            case HeroState.EVADE:
+                MotionX = 0;
+                break;
+            case HeroState.DEFEND:
+                MotionX = 0;
+                isBlocking = true;
+                anim.SetTrigger("Block");
+                break;
+            case HeroState.DEAD:
+                MotionX = 0;
+                isDead = true;
+                anim.SetTrigger("Death");
+                break;
+        }
+    }
+
+    private void ExitState(HeroState state)
+    {
+        switch (state)
+        {
+            case HeroState.IDLE:
+                break;
+            case HeroState.CHASE:
+                break;
+            case HeroState.RETREAT:
+                break;
+            case HeroState.ATTACK:
+                break;
+            case HeroState.EVADE:
+                break;
+            case HeroState.DEFEND:
+                isBlocking = false;
+                break;
+        }
+    }
+
+    #region Passive State Logic
+
+    // - Effects that can be triggered from Any AI state
+    private void AnyState()
+    {
+        // - Is the player preparing an attack? 
+        //int playerState = pc.GetComponentInChildren<PlayerAnimationEvents>().animationState;
+        //if (playerState == 2 || playerState == 3 || playerState == 4 || playerState == 5)
+        //{
+        //    Debug.LogWarning("HERO: The boss is attacking! Determining Evasive Action..");
+        //    ChangeState(HeroState.EVADE);
+        //}
+    }
 
     // - Idle State
     private void IdleState()
     {
         if (currentState == HeroState.IDLE)
         {
-            MotionX = 0;
+            ChangeState(HeroState.CHASE);
+        }
+    }
 
+    // - Moving State
+    private void MovingState()
+    {
+        if (currentState == HeroState.MOVING)
+        {
+            // - If not at target destination, move towards the destination
+            float distanceToDestination = Vector3.Distance(transform.position, targetMoveDestination);
+            if (distanceToDestination > 1f)
+            {
+                Vector3 direction = (player.transform.position + transform.position).normalized;
+                MotionX = ((direction.x < 0) ? -1 : 1) * Mathf.Ceil(Mathf.Abs(direction.x)) * MoveSpeed;                
+            }
 
+            else if (distanceToDestination < 1f)
+            {
+                ChangeState(HeroState.IDLE);
+            }
         }
     }
 
@@ -118,27 +291,23 @@ public class HeroBehavior : MonoBehaviour
         if (currentState == HeroState.CHASE)
         {
             // - If out of range of a melee attack, move towards the player
-           if (distanceToPlayer > meleeDistance)
-           {
+            if (distanceToPlayer > meleeDistance)
+            {
                 Debug.LogWarning("HERO: I'm moving in to attack.");
 
                 // - Move Toward Player
-                Vector3 direction = (player.transform.position - transform.position).normalized;                
+                Vector3 direction = (player.transform.position - transform.position).normalized;
                 MotionX = ((direction.x < 0) ? -1 : 1) * Mathf.Ceil(Mathf.Abs(direction.x)) * MoveSpeed; // - Direction * MoveInput (1 or 0) * MoveSpeed
-           }
+            }
 
-           // - If the within range of a melee attack, change to an attack state
-           if (distanceToPlayer <= meleeDistance)
-           {
+            // - If the within range of a melee attack, change to an attack state
+            if (distanceToPlayer <= meleeDistance)
+            {
                 Debug.LogWarning("HERO: I'm ready to attack.");
 
                 // - Set State To Attack
                 ChangeState(HeroState.ATTACK);
-           }
-
-           /// - TODO: Scan for incoming attacks and switch to evasion state if detected
-
-
+            }           
         }
     }
 
@@ -173,16 +342,82 @@ public class HeroBehavior : MonoBehaviour
     {
         if (currentState == HeroState.EVADE)
         {
+            // - Analyze Which Attack is Coming
+            int incomingAttack = player.GetComponentInChildren<PlayerAnimationEvents>().currentAttack;
+            /// Reminder: 1 = sword attack, 2 = spear dash, 3 = chain pull
+            Debug.Log(incomingAttack);
 
-        }
-    }
 
-    // - Defend State
-    private void DefendState()
-    {
-        if (currentState == HeroState.DEFEND)
-        {
+            // - Reaction to Sword Attack
+            if (incomingAttack == 1)
+            {
+                // - Select either to block or dodge
+                /// - TODO: Replace with Decision Algorithm
+                int rand = Random.Range(0, 100);
+                if (rand > 50) Block();
+                else DodgeRoll();
+            }
 
+            // - Reaction to Spear Dash
+            if (incomingAttack == 2)
+            {
+                Vector3 playerPos = player.transform.position;
+                Vector3 playerVel = pc.rb.linearVelocity;
+                float dashSpeed = pc.dashPower;
+
+                // - Boss has begun their dash attack
+                if (playerVel.magnitude > 1f)
+                {
+                    Debug.Log("Boss is dashing");
+                    // - Roll towards player to dodge
+                    if (distanceToPlayer < 17f) // - May need to adjust reaction distance
+                    {
+                        Debug.Log("I'm dodging");
+                        Vector3 rollDirection = (player.transform.position - transform.position).normalized;
+                        float newX = ((rollDirection.x < 0) ? -1 : 1) * Mathf.Ceil(Mathf.Abs(rollDirection.x));
+                        DodgeRoll((int)newX);
+                    }
+                }
+            }
+
+            // - Reaction to Chain Pull
+            if (incomingAttack == 3)
+            {
+                // - Boss has thrown their chain
+                if (distanceToPlayer < 11.5f + transform.localScale.x)
+                {
+                    // - Jump or Roll Backwards Away From Attack
+                    int rand = Random.Range(0, 100);
+                    if (rand > 50)
+                    {
+                        Vector3 rollDirection = (player.transform.position - transform.position).normalized;
+                        float newX = ((rollDirection.x < 0) ? -1 : 1) * Mathf.Ceil(Mathf.Abs(rollDirection.x));
+                        DodgeRoll((int)newX);
+                    }
+
+                    else
+                    {
+                        rigid.AddForce(Vector3.up * jumpForce, ForceMode2D.Impulse);
+                    }
+                }
+            }
+
+            // - Reaction to Fire Blast
+            if (incomingAttack == 4)
+            {
+                // - Scan for Nearby Fireblasts
+                GameObject fireblast = GameObject.FindGameObjectWithTag("Fireblast");
+
+                if (fireblast != null)
+                {
+                    float distanceToFireblast = Vector3.Distance(transform.position, fireblast.transform.position);
+                    if (distanceToFireblast < 10f + transform.localScale.x)
+                    {
+                        // - Roll Away.  It's unblockable!
+                        DodgeRoll();
+                    }
+                }
+            }               
         }
     }
 
@@ -229,11 +464,11 @@ public class HeroBehavior : MonoBehaviour
         }
     }
 
-    // - Change State
-    public void ChangeState(HeroState newState)     
-    {
-        currentState = newState;
-    }
+    #endregion
+
+    #endregion
+
+    
     
     // - Fire Animations
     private void InvokeAnimation(HeroAnimation animation)
@@ -303,7 +538,8 @@ public class HeroBehavior : MonoBehaviour
             transform.localScale = new Vector3(1, 1, 1);
 
         // - Toggle whether running or idle animation should be used
-        anim.SetInteger("AnimState", (MotionX != 0) ? 1 : 0); 
+        anim.SetInteger("AnimState", (MotionX != 0) ? 1 : 0);
+        anim.SetBool("IdleBlock", isBlocking);
     }
 
 
@@ -311,7 +547,7 @@ public class HeroBehavior : MonoBehaviour
 
     [Header("AI Detection")]
     public GameObject player;
-    public Animator player_anim;
+    public PlayerController pc;
     public List<int> player_inputs = new List<int>();
     public float distanceToPlayer;
     public bool nearLeftEdge = false;
@@ -394,26 +630,62 @@ public class HeroBehavior : MonoBehaviour
 
     #region HeroAbilities 
 
-    public void DodgeRoll()
+    private void Block()
     {
-        InvokeAnimation(HeroAnimation.ROLL);
-        StartCoroutine(AnimationDelay());
+        // - Change State to Defend
+        ChangeState(HeroState.DEFEND);
     }
 
-    public void StartDodgeRoll()
+    private void DodgeRoll(int overrideDir = 0)
     {
+        int dir = overrideDir;
+
+        if (dir == 0)
+        {
+            if (nearLeftEdge) dir = 1;          // - Roll to Right
+            else if (nearRightEdge) dir = -1;   // - Roll to Left
+            else
+            {   
+                // - Random Roll Direction
+                int rand = Random.Range(0, 100);
+                dir = (rand > 50) ? 1 : -1;
+            }
+        }
+        
+        StartDodgeRoll(dir);      
+    }
+
+    public void StartDodgeRoll(int dir)
+    {
+        // - Call the Animation
+        anim.SetTrigger("Roll");
+
+        // - Change Collision Layer
+        gameObject.layer = LayerMask.NameToLayer("Dodge");
+
         // - Get the dash direction based on the local scale
-        Vector2 dashDirection = new Vector2(transform.localScale.x, 0f).normalized;
+        Vector2 rollDirection = new Vector2(dir, 0f).normalized;
+
+        // - Set the look direction to be in the direction of the dash
+        transform.localScale = new Vector3(dir, 1f, 1f);
 
         // - Set a rigidbody velocity for the duration
-        rigid.linearVelocity = dashDirection * dashPower;
+        rigid.linearVelocity = rollDirection * rollPower;
+
+        // - Set IsRolling to True
+        isRolling = true;
     }
 
     public void StopDodgeRoll()
     {
+        gameObject.layer = LayerMask.NameToLayer("Default");
+
         // - Reset the dash
         rigid.linearVelocity = Vector2.zero;
-    }
+
+        // - Set IsRolling to False
+        isRolling = false;
+    }    
 
     public void StartAttack1()
     {

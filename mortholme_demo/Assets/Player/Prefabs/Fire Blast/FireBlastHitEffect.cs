@@ -14,8 +14,8 @@ public class FireBlastHitEffect : MonoBehaviour
         if (col.gameObject.tag == "Hero")
         {
             // - Deal Damage
-        
-        
+            col.GetComponent<HealthScript>().DealDamage(7f);
+
             // - Launch Target Back
             Rigidbody2D rigid = col.gameObject.GetComponent<Rigidbody2D>();
             Vector3 launchDir = (col.gameObject.transform.position - transform.position).normalized;

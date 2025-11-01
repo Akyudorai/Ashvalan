@@ -22,6 +22,11 @@ public class PlayerAnimationEvents : MonoBehaviour
     public BoxCollider2D hitbox;
 
     public bool isPulling = false;
+    public int currentAttack = 0;
+
+    public delegate void AttackHandler(string phase, float impactTime);
+    public static event AttackHandler OnAttackAnimation;
+
 
     private void Awake() 
     {
@@ -40,6 +45,26 @@ public class PlayerAnimationEvents : MonoBehaviour
         }
     }
    
+    // - 1 = Sword Swing, 2 = Spear Dash, 3 = Chain Pull
+    public void AttackStarted(int i)
+    {
+        currentAttack = i;
+        float impactTime =
+            (i == 1) ? 0.27f :  // - ~0.27s and ~0.25s between first and second hitbox triggers
+            (i == 2) ? 0.40f :  // - ~0.4s before hitbox triggers
+            (i == 3) ? 0.34f :  // - ~0.34s before hitbox triggers
+            (i == 4) ? 0.3f :   // - ~0.25s before fireblast detonates
+            0.5f;               // 0.5s doesn't represent anything, just a placeholder
+
+        OnAttackAnimation?.Invoke("Threat", impactTime);
+    }
+
+    public void AttackEnded(int i)
+    {
+        currentAttack = 0;
+        OnAttackAnimation?.Invoke("Recovery", 0f);
+    }
+
     // - Called as an animation event on the first frame of each animation
     public void SetAnimationState(int i) 
     {
@@ -63,47 +88,100 @@ public class PlayerAnimationEvents : MonoBehaviour
     {
         Debug.Log("Attack Hit Response");
 
-        // - Add Target to Hit List
-        targetsHit.Add(hit);
+        HeroBehavior hb = hit.GetComponent<HeroBehavior>();
 
-        // - Deal Damage
+        if (hb != null)
+        {
+            // - Prepare Knockback Values
+            Rigidbody2D rigid = hit.GetComponent<Rigidbody2D>();
+            Vector3 launchDir = (hit.transform.position - transform.position).normalized;
+            float launchForce = 12f;
+            
+            // - If the Hero is blocking, perform only a slight knockback            
+            if (hb.isBlocking)
+            {
+                launchForce *= 0.25f;
+                rigid.AddForce(launchDir * launchForce, ForceMode2D.Impulse);
 
+                // - TODO: Play Block SFX
 
-        // - Launch Target Back
-        Rigidbody2D rigid = hit.GetComponent<Rigidbody2D>();
-        Vector3 launchDir = (hit.transform.position - transform.position).normalized;
-        float launchForce = 12f;
-        rigid.AddForce(launchDir * launchForce, ForceMode2D.Impulse);
+                return;
+            }
+            
+            // - Add Target to Hit List
+            targetsHit.Add(hit);
+
+            // - Deal Damage
+            hit.GetComponent<HealthScript>().DealDamage(10f);
+
+            // - Launch Target Back with Full Force            
+            rigid.AddForce(launchDir * launchForce, ForceMode2D.Impulse);
+
+        }
     }
 
     private void SpearHitResponse(GameObject hit) 
     {
         Debug.Log("Spear Hit Response");
 
-        // - Add Target to Hit List
-        targetsHit.Add(hit);
+        HeroBehavior hb = hit.GetComponent<HeroBehavior>();
 
-        // - Deal Damage
-        
-        
-        // - Launch Target Back
-        Rigidbody2D rigid = hit.GetComponent<Rigidbody2D>();
-        Vector3 launchDir = (hit.transform.position - transform.position).normalized;
-        launchDir += Vector3.up * 0.4f;
-        float launchForce = 12f;
-        rigid.AddForce(launchDir * launchForce, ForceMode2D.Impulse);
+        if (hb != null)
+        {
+            // - Prepare Knockback Values
+            Rigidbody2D rigid = hit.GetComponent<Rigidbody2D>();
+            Vector3 launchDir = (hit.transform.position - transform.position).normalized;
+            launchDir += Vector3.up * 0.4f;
+            float launchForce = 12f;
+
+            // - If the Hero is blocking, perform only a slight knockback            
+            if (hb.isBlocking)
+            {
+                launchForce *= 0.25f;
+                rigid.AddForce(launchDir * launchForce, ForceMode2D.Impulse);
+                
+                // - TODO: Play Block SFX
+
+
+                return;
+            }
+
+            // - Add Target to Hit List
+            targetsHit.Add(hit);
+
+            // - Deal Damage
+            hit.GetComponent<HealthScript>().DealDamage(15f);
+
+            // - Launch Target Back with Full Force            
+            rigid.AddForce(launchDir * launchForce, ForceMode2D.Impulse);
+
+        }
     }
 
-    private void ChainHitResponse(GameObject hit) 
-    {   
+    private void ChainHitResponse(GameObject hit)
+    {
         Debug.Log("Chain Hit Response");
 
-        // - Add Target to Hit List
-        targetsHit.Add(hit);
+        HeroBehavior hb = hit.GetComponent<HeroBehavior>();
 
-        // - Deal Damage
+        if (hb != null)
+        {
+            if (hb.isBlocking)
+            {
+                // - TODO: Play Block SFX
 
-        // - Apply Stun to target for duration of animation
+                return;
+            }
+
+            // - Add Target to Hit List
+            targetsHit.Add(hit);
+
+            // - Deal Damage
+            hit.GetComponent<HealthScript>().DealDamage(7f);
+
+            // - Apply Stun to target for duration of animation
+
+        }
     }
 
     public void StartPull() 

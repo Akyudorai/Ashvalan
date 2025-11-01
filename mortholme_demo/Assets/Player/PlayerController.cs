@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     // - Component References
     public Animator anim;
     public Rigidbody2D rb;
+    public HealthScript health;
 
     // - Object References
     public GameObject fireBlast_prefab;
@@ -17,9 +18,27 @@ public class PlayerController : MonoBehaviour
     public bool CanMove = true;
     public float MoveSpeed = 1.5f;
     
-    public float dashPower = 5f; 
+    public float dashPower = 5f;
 
+    // - Animation Variables
+    AnimatorClipInfo[] currentAnimationClip;
+    public int currentFrameIndex = 0;
+    public int currentFrameMax = 0;
 
+    private void OnEnable()
+    {
+        health.OnDeath += OnDeath;
+    }
+
+    private void OnDisable()
+    {
+        health.OnDeath -= OnDeath;
+    }
+
+    private void OnDeath()
+    {
+        anim.SetTrigger("Death");
+    }
 
     public void Move(InputAction.CallbackContext context) 
     {
@@ -33,9 +52,10 @@ public class PlayerController : MonoBehaviour
         if (MotionX != 0 && CanMove) 
             transform.position += transform.right * MotionX * MoveSpeed * Time.deltaTime;
 
-        // - Update Animator Parameters
+        // - Update Animator Parameters        
         HandleAnimator();
     }
+
 
     private IEnumerator AnimationDelay() 
     {
@@ -89,12 +109,18 @@ public class PlayerController : MonoBehaviour
         // - Get the dash direction based on the local scale
         Vector2 dashDirection = new Vector2(transform.localScale.x, 0f).normalized;
 
+        // - Allow Rigidbody Movement along X Axis
+        rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+
         // - Set a rigidbody velocity for the duration
         rb.linearVelocity = dashDirection * dashPower;
     }
 
     public void StopSpearDash() 
     {
+        // - Lock Constraints for Forced Movement
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+
         // - Reset the dash
         rb.linearVelocity = Vector2.zero;    
     }
