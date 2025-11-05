@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEditor.Embree;
 
 /*
     Animation States
@@ -60,9 +61,15 @@ public class PlayerAnimationEvents : MonoBehaviour
     }
 
     public void AttackEnded(int i)
-    {
-        currentAttack = 0;
-        OnAttackAnimation?.Invoke("Recovery", 0f);
+    {   
+        // - For some reason, this event is not being called properly on the chain attack,
+        // - So we're calling it as an animation event at the beginning of the Idle animation.
+        // - Thus, the need for the currentAttack check here.
+        if (currentAttack != 0) 
+        {
+            currentAttack = 0;        
+            OnAttackAnimation?.Invoke("Recovery", 0f);
+        }
     }
 
     // - Called as an animation event on the first frame of each animation
@@ -95,16 +102,42 @@ public class PlayerAnimationEvents : MonoBehaviour
             // - Prepare Knockback Values
             Rigidbody2D rigid = hit.GetComponent<Rigidbody2D>();
             Vector3 launchDir = (hit.transform.position - transform.position).normalized;
-            float launchForce = 12f;
+            float launchForce = 25f;
             
             // - If the Hero is blocking, perform only a slight knockback            
             if (hb.isBlocking)
             {
-                launchForce *= 0.25f;
-                rigid.AddForce(launchDir * launchForce, ForceMode2D.Impulse);
+                // - If hero is blocking and looking towards this object (player)
+                if (Mathf.Sign(hb.gameObject.transform.localScale.x) != Mathf.Sign(pc.gameObject.transform.localScale.x))
+                {
+                    // - Hero is facing the player (looking towards this object)
+                    launchForce *= 0.25f;
+                    rigid.AddForce(launchDir * launchForce, ForceMode2D.Impulse);
 
-                // - TODO: Play Block SFX
+                    // - Deal Damage reduced by Block Percentage
+                    hit.GetComponent<HealthScript>().DealDamage(10f * (1f - hb.blockReduction));
 
+                    // - TODO: Play Block SFX
+                }
+
+                else
+                {
+                    // - Hero is not facing the player (looking away from this object)
+                    launchForce *= 1.25f; // - Stronger knockback for missing the block
+                    launchDir += Vector3.up * 0.2f; // - Add slight upward force
+                    rigid.AddForce(launchDir * launchForce, ForceMode2D.Impulse);
+
+                    // - Apply Stun (prevents blocking or attacking immediately after being hit)
+                    hb.ApplyStun(0.5f);
+
+                    // - Turn off isBlocking on hero
+                    hb.ChangeState(HeroState.IDLE);
+                    hb.isBlocking = false;
+
+                    // - Deal Full Damage since blocking in wrong direction
+                    hit.GetComponent<HealthScript>().DealDamage(10f);
+                }
+                    
                 return;
             }
             
@@ -132,16 +165,44 @@ public class PlayerAnimationEvents : MonoBehaviour
             Rigidbody2D rigid = hit.GetComponent<Rigidbody2D>();
             Vector3 launchDir = (hit.transform.position - transform.position).normalized;
             launchDir += Vector3.up * 0.4f;
-            float launchForce = 12f;
+            float launchForce = 25f;
 
             // - If the Hero is blocking, perform only a slight knockback            
             if (hb.isBlocking)
             {
-                launchForce *= 0.25f;
-                rigid.AddForce(launchDir * launchForce, ForceMode2D.Impulse);
-                
-                // - TODO: Play Block SFX
+                // - If hero is blocking and looking towards this object (player)
+                if (Mathf.Sign(hb.gameObject.transform.localScale.x) != Mathf.Sign(pc.gameObject.transform.localScale.x))
+                {
+                    // - Hero is facing the player (looking towards this object)
+                    launchForce *= 0.25f;
+                    rigid.AddForce(launchDir * launchForce, ForceMode2D.Impulse);
 
+                    // - Deal Damage reduced by Block Percentage
+                    hit.GetComponent<HealthScript>().DealDamage(15f * (1f - hb.blockReduction));
+
+                    // - TODO: Play Block SFX
+                }
+
+                else
+                {
+                    // - Hero is not facing the player (looking away from this object)
+                    launchForce *= 1.25f; // - Stronger knockback for missing the block
+                    launchDir += Vector3.up * 0.2f; // - Add slight upward force
+                    rigid.AddForce(launchDir * launchForce, ForceMode2D.Impulse);
+
+                    // - Apply Stun (prevents blocking or attacking immediately after being hit)
+                    hb.ApplyStun(0.5f);
+
+                    // - Turn off isBlocking on hero
+                    hb.ChangeState(HeroState.IDLE);
+                    hb.isBlocking = false;
+
+                    // - Apply Stun (prevents blocking or attacking immediately after being hit)
+                    hb.ApplyStun(0.5f);
+
+                    // - Deal Full Damage since blocking in wrong direction
+                    hit.GetComponent<HealthScript>().DealDamage(15f);
+                }
 
                 return;
             }
@@ -168,7 +229,31 @@ public class PlayerAnimationEvents : MonoBehaviour
         {
             if (hb.isBlocking)
             {
-                // - TODO: Play Block SFX
+                // - If hero is blocking and looking towards this object (player)
+                if (Mathf.Sign(hb.gameObject.transform.localScale.x) != Mathf.Sign(pc.gameObject.transform.localScale.x))
+                {
+                    // - Hero is facing the player (looking towards this object)
+
+                    // - Deal Damage reduced by Block Percentage
+                    hit.GetComponent<HealthScript>().DealDamage(7f * (1f - hb.blockReduction));
+
+                    // - TODO: Play Block SFX
+                }
+
+                else
+                {
+                    // - Hero is not facing the player (looking away from this object)
+
+                    // - Turn off isBlocking on hero
+                    hb.ChangeState(HeroState.IDLE);
+                    hb.isBlocking = false;                    
+
+                    // - Deal Full Damage since blocking in wrong direction
+                    hit.GetComponent<HealthScript>().DealDamage(7f);
+
+                    // - Add Target to Hit List
+                    targetsHit.Add(hit);
+                }
 
                 return;
             }
@@ -178,9 +263,6 @@ public class PlayerAnimationEvents : MonoBehaviour
 
             // - Deal Damage
             hit.GetComponent<HealthScript>().DealDamage(7f);
-
-            // - Apply Stun to target for duration of animation
-
         }
     }
 

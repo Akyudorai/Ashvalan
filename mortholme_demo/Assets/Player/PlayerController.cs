@@ -17,8 +17,8 @@ public class PlayerController : MonoBehaviour
     public float MotionX;
     public bool CanMove = true;
     public float MoveSpeed = 1.5f;
-    
     public float dashPower = 5f;
+    public bool readyToBurnHero = false;
 
     // - Animation Variables
     AnimatorClipInfo[] currentAnimationClip;
@@ -54,6 +54,9 @@ public class PlayerController : MonoBehaviour
 
         // - Update Animator Parameters        
         HandleAnimator();
+
+        // - Toggle Passive Burn Ability based on Combat State
+        ToggleBurnAway();
     }
 
 
@@ -84,10 +87,14 @@ public class PlayerController : MonoBehaviour
     // - ASSIGNED TO ATTACK
     public void Attack(InputAction.CallbackContext context) 
     {   
-        if (context.performed) 
+        // - Player cannot attack when not in combat
+        if (!Game.isCombatActive) return;
+
+        if (context.performed && InterfaceManager.Instance.GetSkillCooldown(1) <= 0f) 
         {
             anim.SetTrigger("Attack");
             PlayerInputTracker.SubmitInput(2);
+            InterfaceManager.Instance.StartSkillTimer(1, 3f);
             StartCoroutine(AnimationDelay());
         }
             
@@ -96,10 +103,14 @@ public class PlayerController : MonoBehaviour
     // - ASSIGNED TO ABILITY 1
     public void SpearAttack(InputAction.CallbackContext context) 
     {   
-        if (context.performed)
+        // - Player cannot attack when not in combat
+        if (!Game.isCombatActive) return;
+
+        if (context.performed && InterfaceManager.Instance.GetSkillCooldown(2) <= 0f)
         {
             anim.SetTrigger("Spear");
             PlayerInputTracker.SubmitInput(3);
+            InterfaceManager.Instance.StartSkillTimer(2, 3f);
             StartCoroutine(AnimationDelay());
         }            
     }
@@ -128,10 +139,13 @@ public class PlayerController : MonoBehaviour
     // - ASSIGNED TO ABILITY 2
     public void ChainAttack(InputAction.CallbackContext context) 
     {
-        if (context.performed)
+        if (!Game.isCombatActive) return;
+
+        if (context.performed && InterfaceManager.Instance.GetSkillCooldown(3) <= 0f)
         {
             anim.SetTrigger("Chain");
             PlayerInputTracker.SubmitInput(4);
+            InterfaceManager.Instance.StartSkillTimer(3, 3f);
             StartCoroutine(AnimationDelay());
         }       
     }
@@ -139,31 +153,82 @@ public class PlayerController : MonoBehaviour
     // - ASSIGNED TO ABILITY 3
     public void SpellAttack(InputAction.CallbackContext context) 
     {
-        if (context.performed)
+        // - Player cannot attack when not in combat
+        if (!Game.isCombatActive) return;
+
+        if (context.performed && InterfaceManager.Instance.GetSkillCooldown(4) <= 0f)
         {
             anim.SetTrigger("Spell");
             PlayerInputTracker.SubmitInput(5);
+            InterfaceManager.Instance.StartSkillTimer(4, 3f);
             StartCoroutine(AnimationDelay());
         }
             
     }
 
     // -- ASSIGNED TO ABILITY 4
-    public void BuffSpell(InputAction.CallbackContext context) 
+    public void BurnSpell(InputAction.CallbackContext context) 
     {
         if (context.performed)
-        {
+        {   
+            Debug.Log("Attempting to Burn Away");
+            if (!readyToBurnHero) return;
+
+            Debug.Log("BURN AWAY!");
+            
             anim.SetTrigger("Buff");
             PlayerInputTracker.SubmitInput(6);
+            GameManager.Instance.ClearHero();
+            GameManager.Instance.LevelUp();
             StartCoroutine(AnimationDelay());
         }
             
     }
 
-    
+    private void ToggleBurnAway() 
+    {
+        
 
-    
+        if (!Game.isCombatActive && GameManager.Instance.heroObj != null) 
+        {
+            if (Vector3.Distance(transform.position, GameManager.Instance.heroObj.transform.position) < 2.5f) 
+            {
+                InterfaceManager.Instance.TogglePassive(true);
+                readyToBurnHero = true;
+                
+            }
 
-    
+            else 
+            {
+                InterfaceManager.Instance.TogglePassive(false);
+                readyToBurnHero = false; 
+            }
+        }
+
+        else 
+        {
+            InterfaceManager.Instance.TogglePassive(false);
+            readyToBurnHero = false;
+        }
+
+    }
+
 #endregion
+
+    private void OnTriggerEnter2D(Collider2D collision) 
+    {
+        if (collision.gameObject.CompareTag("PlayerReset")) 
+        {
+            Game.isPlayerResetReady = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision) 
+    {
+        if (collision.gameObject.CompareTag("PlayerReset")) 
+        {
+            Game.isPlayerResetReady = false;
+        }
+    }
+
 }

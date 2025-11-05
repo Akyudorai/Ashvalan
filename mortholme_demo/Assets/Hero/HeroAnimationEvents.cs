@@ -32,9 +32,9 @@ public class HeroAnimationEvents : MonoBehaviour
 
         // - Deal Damage
         float damage = 0;
-        if (index == 1) damage = 1;
-        if (index == 2) damage = 2;
-        if (index == 3) damage = 3;
+        if (index == 1) damage = hero.currentAttackDamage;
+        if (index == 2) damage = hero.currentAttackDamage * 1.5f;
+        if (index == 3) damage = hero.currentAttackDamage * 2f;
         hit.GetComponent<HealthScript>().DealDamage(damage);
     }
 
@@ -46,8 +46,8 @@ public class HeroAnimationEvents : MonoBehaviour
         {
             Debug.LogWarning("HERO: Seems to be safe to continue attacking!");
 
-            if (i == 1) hero.StartAttack2();
-            if (i == 2) hero.StartAttack3();
+            if (i == 1 && hero.attackTimer <= 0.1f) hero.StartAttack2();
+            if (i == 2 && hero.attackTimer <= 0.1f) hero.StartAttack3();
 
             // - End of Attack Chain
             else
