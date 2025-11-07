@@ -14,7 +14,12 @@ public class GameManager : MonoBehaviour
     public GameObject heroObj;
     public GameObject playerObj;
 
+    [Header("Game Start Settings")]
     public GameObject heroRespawnTrigger;
+    public bool triggerShouldBeOnAtStart = false;
+
+    public delegate void CombatStartDelegate();
+    public CombatStartDelegate OnCombatStart;   
 
     [Header("Torches")]
     public GameObject[] torches = new GameObject[10];    
@@ -22,6 +27,11 @@ public class GameManager : MonoBehaviour
     private void Awake() 
     {
         Instance = this;
+
+        if (!triggerShouldBeOnAtStart)
+            Game.isCinematicActive = true;
+
+        Game.OnTransitionComplete += OnSceneLoaded;        
     }
 
     private void Update() 
@@ -33,23 +43,73 @@ public class GameManager : MonoBehaviour
         }
         
         // - Toggle on Respawn Trigger if Hero is Dead
-        if (heroObj == null && heroRespawnTrigger.activeSelf == false) 
+        if (triggerShouldBeOnAtStart)
         {
-            heroRespawnTrigger.SetActive(true);
+            if (heroObj == null && heroRespawnTrigger.activeSelf == false) 
+            {
+                heroRespawnTrigger.SetActive(true);
+            }
         }
+        
+    }
+
+    public void OnSceneLoaded()
+    {
+        // - Clear all subscribed events to prevent multiple triggers
+        Game.OnTransitionComplete = null;
+
+        // - Start Opening Cinematic        
+        SpawnHero();
+    }
+
+    public IEnumerator EndCinematic()
+    {
+        yield return new WaitForSeconds(2.5f);
+
+        // - Face towards where hero would emerge 
+        float direction = -1f;
+
+        Vector3 playerScale = playerObj.transform.localScale;
+        playerScale.x = Mathf.Abs(playerScale.x) * direction;
+        playerObj.transform.localScale = playerScale;
+
+        // - Start Dialogue
+        GameOver();
     }
 
     public void SpawnHero()
     {
+        if (Game.currentLevel == 10)
+        {
+            // - Turn off respawn trigger
+            heroRespawnTrigger.SetActive(false);
+    
+            StartCoroutine(EndCinematic());
+            return;
+        }
+
         if (heroSpawnPoint == null) return;
 
         // - Instantiate the Hero
         heroObj = Instantiate(heroPrefab, heroSpawnPoint.position, Quaternion.identity);
-        heroObj.GetComponent<HeroBehavior>().MoveTo(heroSpawnDestination.position);
         InterfaceManager.Instance.heroHealth = heroObj.GetComponent<HealthScript>();
 
-        // - Delay combat start to allow for hero to reach destination
-        StartCoroutine(StartCombatRoutine());
+        // - Subscribe to OnMoveComplete to begin Dialogue
+        HeroBehaviorController hero = heroObj.GetComponent<HeroBehaviorController>();
+        hero.MoveTo(heroSpawnDestination.position);
+        hero.MoveCompleted += DialogueManager.Instance.begin_dialogue;
+        hero.MoveCompleted += (string s) =>
+        {
+            // - Face towards the hero 
+            float direction = -1f;
+
+            Vector3 playerScale = playerObj.transform.localScale;
+            playerScale.x = Mathf.Abs(playerScale.x) * direction;
+            playerObj.transform.localScale = playerScale;
+        };
+
+        // - Subscribe to begin combat when dialogue is complete.
+        DialogueManager.YarnDialogueComplete += BeginCombat;
 
         // - Turn off respawn trigger
         heroRespawnTrigger.SetActive(false);
@@ -63,31 +123,50 @@ public class GameManager : MonoBehaviour
         if (Game.currentLevel < 10)
         {
             torches[Game.currentLevel].SetActive(true); // - Light the torch for the current level
-            Game.currentLevel += 1; // - Increment the difficulty level
-            heroRespawnTrigger.SetActive(true); // - Enable respawn trigger for next fight
+            Game.currentLevel += 1; // - Increment the difficulty level  
+            StartCoroutine(DelayRespawnTrigger(4f));          
         }
                
     }
 
-    // - Temporary Method to Start Combat after Spawning Hero
-    private IEnumerator StartCombatRoutine() 
+    public void BeginCombat()
     {
-        yield return new WaitForSeconds(7f);
+        // - Clear Cinematic and Dialogue states
+        Game.isCinematicActive = false;
+        Game.isDialogueActive = false;
+
+        // Toggle Combat state
+        Game.isCombatActive = true; // - Initiate Combat   
+
+        // - Refresh User Interface
         InterfaceManager.Instance.RefreshUI();
-        BeginCombat();
-    }
 
-    public void BeginCombat() 
-    {
-        Game.isCombatActive = true; // - Initiate Combat         
+    
         heroObj.GetComponent<Rigidbody2D>().excludeLayers = exclusionLayers; // - Stop hero from walking through walls
+        OnCombatStart?.Invoke();
     }
 
-    public void ClearHero() 
+    public void ClearHero()
     {
-        if (heroObj != null) 
+        if (heroObj != null)
         {
             Destroy(heroObj);
         }
+    }
+    
+    private IEnumerator DelayRespawnTrigger(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        heroRespawnTrigger.SetActive(true); // - Enable respawn trigger for next fight
+    }
+
+    public void GameOver()
+    {
+        DialogueManager.YarnDialogueComplete += () =>
+        {            
+            TransitionHandler.Instance.StartSceneTransition("credits", 2f);                                    
+        };
+
+        DialogueManager.Instance.begin_dialogue("game_over");
     }
 }

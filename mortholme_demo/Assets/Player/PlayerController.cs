@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     public Animator anim;
     public Rigidbody2D rb;
     public HealthScript health;
+    public AudioManager audio;
+    public GameObject canvas;
 
     // - Object References
     public GameObject fireBlast_prefab;
@@ -46,17 +48,28 @@ public class PlayerController : MonoBehaviour
         MotionX = motion.x;
     }
 
-    private void Update() 
-    {      
-        // - If motion input is detected, move the player accordingly.
-        if (MotionX != 0 && CanMove) 
-            transform.position += transform.right * MotionX * MoveSpeed * Time.deltaTime;
-
-        // - Update Animator Parameters        
-        HandleAnimator();
-
+    private void Update()
+    {
         // - Toggle Passive Burn Ability based on Combat State
         ToggleBurnAway();
+
+        
+
+        // - Freeze Player
+        if (Game.isDialogueActive || Game.isCinematicActive) return;
+
+        // - Prevent inverted canvas based on look direction of player
+        float playerDir = Mathf.Sign(transform.localScale.x);
+        if (playerDir == 0f) playerDir = 1f;
+        float canvasScale = 0.02617211f;
+        canvas.transform.localScale = new Vector3( canvasScale * playerDir, canvasScale, canvasScale);
+
+        // - If motion input is detected, move the player accordingly.
+        if (MotionX != 0 && CanMove)
+            transform.position += transform.right * MotionX * MoveSpeed * Time.deltaTime;    
+
+        // - Update Animator Parameters        
+        HandleAnimator();    
     }
 
 
@@ -171,11 +184,8 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed)
         {   
-            Debug.Log("Attempting to Burn Away");
             if (!readyToBurnHero) return;
 
-            Debug.Log("BURN AWAY!");
-            
             anim.SetTrigger("Buff");
             PlayerInputTracker.SubmitInput(6);
             GameManager.Instance.ClearHero();
@@ -220,6 +230,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("PlayerReset")) 
         {
             Game.isPlayerResetReady = true;
+            Game.isCinematicActive = true;
         }
     }
 

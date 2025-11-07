@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class HeroAnimationEvents : MonoBehaviour
 {
-    private HeroBehavior hero;
+    private HeroBehaviorController hero;
 
     public int animationState = 0; // - currently used to dictate what kind of hitbox event occurs
     public List<GameObject> targetsHit = new List<GameObject>(); // - Stores a list of targets that have been involved in hitbox collisions to prevent triggering their effects multiple times 
@@ -11,7 +11,7 @@ public class HeroAnimationEvents : MonoBehaviour
 
     private void Awake()
     {
-        hero = GetComponentInParent<HeroBehavior>();
+        hero = GetComponentInParent<HeroBehaviorController>();
     }
 
     // - Called as an animation event on the first frame of each animation
@@ -23,37 +23,44 @@ public class HeroAnimationEvents : MonoBehaviour
         targetsHit.Clear();
     }
 
+    public void PlayClip(string name)
+    {
+        hero.audio.PlayClip(name);
+    }
+
     private void AttackHitResponse(GameObject hit, int index)
     {
-        Debug.Log("Attack ["+index+"] Hit Response");
+        Debug.Log("Attack [" + index + "] Hit Response");
 
         // - Add Target to Hit List
         targetsHit.Add(hit);
 
+        hero.audio.PlayClip("hSword");
+
         // - Deal Damage
         float damage = 0;
-        if (index == 1) damage = hero.currentAttackDamage;
-        if (index == 2) damage = hero.currentAttackDamage * 1.5f;
-        if (index == 3) damage = hero.currentAttackDamage * 2f;
+        if (index == 1) damage = hero.stats.currentAttackDamage;
+        if (index == 2) damage = hero.stats.currentAttackDamage * 1.5f;
+        if (index == 3) damage = hero.stats.currentAttackDamage * 2f;
         hit.GetComponent<HealthScript>().DealDamage(damage);
     }
 
     public void EndAttack(int i)
     {
         // - Is it safe to attack again?  
-        int playerState = hero.pc.GetComponentInChildren<PlayerAnimationEvents>().animationState;
+        int playerState = hero.detection.pc.GetComponentInChildren<PlayerAnimationEvents>().animationState;
         if (playerState != 2 && playerState != 3 && playerState != 4 && playerState != 5)
         {
             Debug.LogWarning("HERO: Seems to be safe to continue attacking!");
 
-            if (i == 1 && hero.attackTimer <= 0.1f) hero.StartAttack2();
-            if (i == 2 && hero.attackTimer <= 0.1f) hero.StartAttack3();
+            if (i == 1 && hero.stats.attackTimer <= 0.1f) hero.StartAttack2();
+            if (i == 2 && hero.stats.attackTimer <= 0.1f) hero.StartAttack3();
 
             // - End of Attack Chain
             else
             {
-                hero.isAttacking = false;
-                hero.attackCombo = 0;
+                hero.stats.isAttacking = false;
+                hero.stats.attackCombo = 0;
             }
         }
 
@@ -62,7 +69,7 @@ public class HeroAnimationEvents : MonoBehaviour
         {
             // - Calculate Threat from current attack animation
             Debug.LogWarning("HERO: I'm in danger. Switching to retreat mode!");
-            hero.ChangeState(HeroState.EVADE);
+            hero.ChangeState(HeroState.EVADING);
         }
     }
 

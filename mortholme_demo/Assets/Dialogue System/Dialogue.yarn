@@ -1,0 +1,112 @@
+﻿title: d1
+---
+Boss: "A mortal at my gates? You must be lost."
+Hero: "I'm exactly where I need to be. Show me why they fear you."
+Boss: "Foolish mortal.."
+<<dialogue_complete>>
+===
+
+title: d2
+---
+Boss: "You..?"
+Boss: "I thought I killed you already?"
+Hero: "You did. But my death only delays your demise."
+Boss: "Hmm.."
+<<dialogue_complete>>
+===
+
+title: d3
+---
+Boss: "You again? Must you bother me so?"
+Hero: "I go where I am needed."
+Boss: "Or where you're doomed."
+Hero: "Then doom will find me ready."
+<<dialogue_complete>>
+===
+
+title: d4
+---
+Boss: "You've returned already?"
+Boss: "You must crave punishment."
+Player: "No.  Progress."
+Player: "Every fight teaches me something."
+Boss: "Lessons? You mistake survival for skill."
+Boss: "Very well. You will die a very educated corpse."
+<<dialogue_complete>>
+===
+
+title: d5
+---
+Boss: "Your persistence is tiresome."
+Hero: "Persistence beats despair."
+Boss: "Empty words, mortal."
+Hero: "Empty until proven true."
+<<dialogue_complete>>
+===
+
+title: d6
+---
+Boss: "You.. endure more than I expected."
+Hero: "I adapt. That's the point of fighting you."
+Boss: "Hmph.  Perhaps you've learned a thing or two."
+Boss: "But it's not enough to beat me."
+Hero: "Watch me."
+<<dialogue_complete>>
+===
+
+title: d7
+---
+Boss: "You're persistent.  Admirable.  Annoying."
+Hero: "Persistence is what it takes to face you.
+Boss: "And yet.. I find no satisfaction in it."
+Hero: "Then perhaps you'll learn something instead.
+<<dialogue_complete>>
+===
+
+title: d8
+---
+Boss: "I grow weary of this dance."
+Hero: "Then try to catch me before I end it."
+Boss: "Try!?  I ALWAYS do."
+Hero: "And I will always return."
+<<dialogue_complete>>
+===
+
+title: d9
+---
+Boss: "I've had enough. You've become.."
+Boss: ".. UNBEARABLE!"
+Hero: "I'm only doing what I must"
+Boss: "I will NOT be outdone by a MORTAL!"
+Hero: "Then try harder."
+<<dialogue_complete>>
+===
+
+title: d10
+---
+Boss: "Fighting you... it's exhausting, infuriating... but enlightening."
+Hero: "Every battle shapes us, if we let it."
+Boss: "I thought skill and power decided victory."
+Boss: "But you've taught me that it is will that bends the outcome."
+Hero: "Then take that lesson to heart."
+Boss: "... I will remember it."
+Hero: "One last time.  Let's go!"
+<<dialogue_complete>>
+===
+
+title: game_over
+---
+Boss: "..." 
+Boss: "......"
+Boss: ".. he does not return."
+Boss: "I expected him to return.. as always."
+Boss: "Thought the fires of battle would call him back."
+Boss: "All these battles, all this struggle.."
+Boss: ".. and I remain undefeated, as always."
+Boss: "Still… a part of me hoped he’d test me once more."
+Boss: "Well... then I wait."
+Boss: "For the next fool brave enough to test themselves."
+Boss: "One day, someone else will take up the fight."
+Boss: "..."
+Boss: "...." 
+===

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 
 public class InterfaceManager : MonoBehaviour
@@ -54,13 +55,13 @@ public class InterfaceManager : MonoBehaviour
     {
         if (heroHealth != null)
         {
-            heroHealthDisplay.text = $"Hero Health: {heroHealth.currentHealth}/{heroHealth.maxHealth}";
+            heroHealthDisplay.text = $"Hero Health: { Mathf.Ceil(heroHealth.currentHealth) } / { heroHealth.maxHealth}";
             heroHealthSlider.fillAmount = heroHealth.currentHealth / heroHealth.maxHealth;        
         }
         
         if (bossHealth != null)
         {
-            bossHealthDisplay.text = $"Boss Health: {bossHealth.currentHealth}/{bossHealth.maxHealth}";
+            bossHealthDisplay.text = $"Boss Health: { Mathf.Ceil(bossHealth.currentHealth) } / { bossHealth.maxHealth}";
             bossHealthSlider.fillAmount = bossHealth.currentHealth / bossHealth.maxHealth;
         }
         

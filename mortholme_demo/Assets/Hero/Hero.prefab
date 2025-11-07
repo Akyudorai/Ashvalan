@@ -220,6 +220,10 @@ GameObject:
   - component: {fileID: 5261751792783039953}
   - component: {fileID: 3671634697318200426}
   - component: {fileID: 3799612711503530482}
+  - component: {fileID: 4868259648364171066}
+  - component: {fileID: 2083358378010534590}
+  - component: {fileID: 6642863623514306484}
+  - component: {fileID: 8905981402509455159}
   m_Layer: 0
   m_Name: Hero
   m_TagString: Hero
@@ -235,7 +239,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8572464907940545419}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -18.32, y: 1.22, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -260,56 +264,25 @@ MonoBehaviour:
   rigid: {fileID: 3799612711503530482}
   health: {fileID: 5261751792783039953}
   groundCheckPoint: {fileID: 4177199845793487669}
-  jumpForce: 10
-  isGrounded: 1
-  MotionX: 0
-  CanMove: 1
-  MoveSpeed: 2
-  rollPower: 20
-  targetMoveDestination: {x: 0, y: 0, z: 0}
-  currentState: 1
+  audio: {fileID: 6642863623514306484}
+  stateAssets:
+  - {fileID: 11400000, guid: 26a5ee3af03290245958a559487e84d5, type: 2}
+  - {fileID: 11400000, guid: 66dd2fdac5a8a354897f0dd003c21769, type: 2}
+  - {fileID: 11400000, guid: 0a0fd6bab3903d44dade226f8aa39435, type: 2}
+  - {fileID: 11400000, guid: 8c31c25b199cff04b8000fee1b84c9a1, type: 2}
+  - {fileID: 11400000, guid: 475ed501ffb5057499c1b073d98e5f1e, type: 2}
+  - {fileID: 11400000, guid: 190a6c0ca7720454c8a0be485ceec194, type: 2}
+  - {fileID: 11400000, guid: 5554c54c48224fb45bb858d69e71e560, type: 2}
+  - {fileID: 11400000, guid: 2ef19caa5f4f19f468653b45ff27f91f, type: 2}
+  activeStateAsset: {fileID: 0}
+  currentState: 0
   stateTime: 0
-  meleeDistance: 3
-  safeRangedDistance: 10
-  attackCombo: 0
-  isAttacking: 0
-  isBlocking: 0
-  isDead: 0
-  isStunned: 0
-  isRolling: 0
-  difficultyLevel: 0
-  baseHealth: 25
-  healthIncreasePerLevel: 10
-  baseDamage: 1
-  damageGrowthPerLevel: 0.25
-  currentAttackDamage: 1
-  baseReactionTime: 0.3
-  reactionDecreasePerLevel: 0.02
-  reactionTime: 0
-  rollTimer: 0
-  rollCooldown: 3
-  rollDecreasePerLevel: 0.3
-  blockReduction: 0
-  blockReductionPerLevel: 0.2
-  attackTimer: 0
-  attackCooldown: 0.5
-  attackCooldownReductionPerLevel: 0.1
+  lastDecisionTime: 0
   unstuckTime: 5
   unstuckDecreasePerLevel: 0.3
-  lastDecisionTime: 0
   actionIsBuffered: 0
-  player: {fileID: 0}
-  pc: {fileID: 0}
-  player_inputs: 
-  distanceToPlayer: 0
-  nearLeftEdge: 0
-  nearRightEdge: 0
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  wallLayer:
-    serializedVersion: 2
-    m_Bits: 64
+  detection: {fileID: 4868259648364171066}
+  stats: {fileID: 2083358378010534590}
 --- !u!114 &5261751792783039953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -398,3 +371,194 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &4868259648364171066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8572464907940545419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29594aacf1ee8d74dbb277716dbb2676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroDetectionSystem
+  player: {fileID: 0}
+  pc: {fileID: 0}
+  player_inputs: 
+  distanceToPlayer: 0
+  nearLeftEdge: 0
+  nearRightEdge: 0
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!114 &2083358378010534590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8572464907940545419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8ed3ae7a08dae2418c1bfb72d27b698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroStats
+  jumpForce: 10
+  isGrounded: 0
+  MotionX: 0
+  CanMove: 1
+  MoveSpeed: 3
+  rollPower: 20
+  targetMoveDestination: {x: 0, y: 0, z: 0}
+  meleeDistance: 3
+  safeRangedDistance: 10
+  attackCombo: 0
+  isAttacking: 0
+  isBlocking: 0
+  isDead: 0
+  isStunned: 0
+  isRolling: 0
+  rollTimer: 0
+  rollCooldown: 3
+  rollDecreasePerLevel: 0.3
+  blockReduction: 0
+  blockReductionPerLevel: 0.2
+  attackTimer: 0
+  attackCooldown: 0.5
+  attackCooldownReductionPerLevel: 0.1
+  baseReactionTime: 0.3
+  reactionDecreasePerLevel: 0.03
+  reactionTime: 0
+  baseDamage: 0.25
+  damageGrowthPerLevel: 0.25
+  currentAttackDamage: 1
+  health: {fileID: 5261751792783039953}
+  baseHealth: 25
+  healthIncreasePerLevel: 10
+--- !u!114 &6642863623514306484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8572464907940545419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ca9054a5a844dd4ebe71156025fb5da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  source: {fileID: 8905981402509455159}
+  sword: {fileID: 0}
+  dash: {fileID: 0}
+  chain: {fileID: 0}
+  spell: {fileID: 0}
+  burn: {fileID: 0}
+  death: {fileID: 0}
+  hDeath: {fileID: 8300000, guid: c4325a862d17d0e44b9e25617e53c523, type: 3}
+  hSwing: {fileID: 8300000, guid: dae0c9bcb7e3ae24a898cd85d9627f25, type: 3}
+  hSword: {fileID: 8300000, guid: 26b15835fdfa4ab4bafd562bfc42893b, type: 3}
+  hBlock1: {fileID: 8300000, guid: 28678effb95866141a7f640204a2413f, type: 3}
+  hBlock2: {fileID: 8300000, guid: f85077e6946e5e748bae5182cdebb518, type: 3}
+  hBlock3: {fileID: 8300000, guid: e9ba234399ae30d4fa0dd90ba957402c, type: 3}
+  hRoll: {fileID: 8300000, guid: b5e3a9b3616796c468d60b67edb04e47, type: 3}
+--- !u!82 &8905981402509455159
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8572464907940545419}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 0.4
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

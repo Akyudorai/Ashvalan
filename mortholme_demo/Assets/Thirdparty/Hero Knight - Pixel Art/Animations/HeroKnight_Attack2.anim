@@ -527,6 +527,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 6
     messageOptions: 0
+  - time: 0.071428575
+    functionName: PlayClip
+    data: hSword
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 0.2857143
     functionName: EndAttack
     data: 

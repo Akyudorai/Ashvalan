@@ -34,18 +34,23 @@ public class PlayerAnimationEvents : MonoBehaviour
         pc = GetComponentInParent<PlayerController>();
     }
 
-    private void Update() 
+    private void Update()
     {
         // - Handle the pull effect of the chain attack
-        if (animationState == 4 && isPulling) 
-        {               
-            foreach (GameObject hit in targetsHit) 
-            {                
-                hit.transform.position = hitbox.bounds.center;                
+        if (animationState == 4 && isPulling)
+        {
+            foreach (GameObject hit in targetsHit)
+            {
+                hit.transform.position = hitbox.bounds.center;
             }
         }
     }
    
+    public void PlayClip(string name)
+    {
+        pc.audio.PlayClip(name);
+    }
+
     // - 1 = Sword Swing, 2 = Spear Dash, 3 = Chain Pull
     public void AttackStarted(int i)
     {
@@ -95,7 +100,7 @@ public class PlayerAnimationEvents : MonoBehaviour
     {
         Debug.Log("Attack Hit Response");
 
-        HeroBehavior hb = hit.GetComponent<HeroBehavior>();
+        HeroBehaviorController hb = hit.GetComponent<HeroBehaviorController>();
 
         if (hb != null)
         {
@@ -105,7 +110,7 @@ public class PlayerAnimationEvents : MonoBehaviour
             float launchForce = 25f;
             
             // - If the Hero is blocking, perform only a slight knockback            
-            if (hb.isBlocking)
+            if (hb.stats.isBlocking)
             {
                 // - If hero is blocking and looking towards this object (player)
                 if (Mathf.Sign(hb.gameObject.transform.localScale.x) != Mathf.Sign(pc.gameObject.transform.localScale.x))
@@ -115,9 +120,10 @@ public class PlayerAnimationEvents : MonoBehaviour
                     rigid.AddForce(launchDir * launchForce, ForceMode2D.Impulse);
 
                     // - Deal Damage reduced by Block Percentage
-                    hit.GetComponent<HealthScript>().DealDamage(10f * (1f - hb.blockReduction));
+                    hit.GetComponent<HealthScript>().DealDamage(10f * (1f - hb.stats.blockReduction));
 
                     // - TODO: Play Block SFX
+                    pc.audio.PlayClip("hBlock");
                 }
 
                 else
@@ -132,7 +138,7 @@ public class PlayerAnimationEvents : MonoBehaviour
 
                     // - Turn off isBlocking on hero
                     hb.ChangeState(HeroState.IDLE);
-                    hb.isBlocking = false;
+                    hb.stats.isBlocking = false;
 
                     // - Deal Full Damage since blocking in wrong direction
                     hit.GetComponent<HealthScript>().DealDamage(10f);
@@ -157,7 +163,7 @@ public class PlayerAnimationEvents : MonoBehaviour
     {
         Debug.Log("Spear Hit Response");
 
-        HeroBehavior hb = hit.GetComponent<HeroBehavior>();
+        HeroBehaviorController hb = hit.GetComponent<HeroBehaviorController>();
 
         if (hb != null)
         {
@@ -168,7 +174,7 @@ public class PlayerAnimationEvents : MonoBehaviour
             float launchForce = 25f;
 
             // - If the Hero is blocking, perform only a slight knockback            
-            if (hb.isBlocking)
+            if (hb.stats.isBlocking)
             {
                 // - If hero is blocking and looking towards this object (player)
                 if (Mathf.Sign(hb.gameObject.transform.localScale.x) != Mathf.Sign(pc.gameObject.transform.localScale.x))
@@ -178,9 +184,10 @@ public class PlayerAnimationEvents : MonoBehaviour
                     rigid.AddForce(launchDir * launchForce, ForceMode2D.Impulse);
 
                     // - Deal Damage reduced by Block Percentage
-                    hit.GetComponent<HealthScript>().DealDamage(15f * (1f - hb.blockReduction));
+                    hit.GetComponent<HealthScript>().DealDamage(15f * (1f - hb.stats.blockReduction));
 
                     // - TODO: Play Block SFX
+                    pc.audio.PlayClip("hBlock");
                 }
 
                 else
@@ -195,7 +202,7 @@ public class PlayerAnimationEvents : MonoBehaviour
 
                     // - Turn off isBlocking on hero
                     hb.ChangeState(HeroState.IDLE);
-                    hb.isBlocking = false;
+                    hb.stats.isBlocking = false;
 
                     // - Apply Stun (prevents blocking or attacking immediately after being hit)
                     hb.ApplyStun(0.5f);
@@ -223,11 +230,11 @@ public class PlayerAnimationEvents : MonoBehaviour
     {
         Debug.Log("Chain Hit Response");
 
-        HeroBehavior hb = hit.GetComponent<HeroBehavior>();
+        HeroBehaviorController hb = hit.GetComponent<HeroBehaviorController>();
 
         if (hb != null)
         {
-            if (hb.isBlocking)
+            if (hb.stats.isBlocking)
             {
                 // - If hero is blocking and looking towards this object (player)
                 if (Mathf.Sign(hb.gameObject.transform.localScale.x) != Mathf.Sign(pc.gameObject.transform.localScale.x))
@@ -235,9 +242,10 @@ public class PlayerAnimationEvents : MonoBehaviour
                     // - Hero is facing the player (looking towards this object)
 
                     // - Deal Damage reduced by Block Percentage
-                    hit.GetComponent<HealthScript>().DealDamage(7f * (1f - hb.blockReduction));
+                    hit.GetComponent<HealthScript>().DealDamage(7f * (1f - hb.stats.blockReduction));
 
                     // - TODO: Play Block SFX
+                    pc.audio.PlayClip("hBlock");
                 }
 
                 else
@@ -246,7 +254,7 @@ public class PlayerAnimationEvents : MonoBehaviour
 
                     // - Turn off isBlocking on hero
                     hb.ChangeState(HeroState.IDLE);
-                    hb.isBlocking = false;                    
+                    hb.stats.isBlocking = false;                    
 
                     // - Deal Full Damage since blocking in wrong direction
                     hit.GetComponent<HealthScript>().DealDamage(7f);
