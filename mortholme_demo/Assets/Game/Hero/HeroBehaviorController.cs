@@ -103,7 +103,8 @@ public class HeroBehaviorController : MonoBehaviour
         lastDecisionTime = 0f;
 
         // - Subscribe to on Combat Start
-        GameManager.Instance.OnCombatStart += CombatBegin;
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnCombatStart += CombatBegin;
     }
 
     private void Update()
