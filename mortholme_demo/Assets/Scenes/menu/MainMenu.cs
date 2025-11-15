@@ -9,7 +9,7 @@ public class MainMenu : MonoBehaviour
 
     public void ShowCredits()
     {
-        
+        TransitionHandler.Instance.StartSceneTransition("credits");
     }
     
     public void QuitGame()

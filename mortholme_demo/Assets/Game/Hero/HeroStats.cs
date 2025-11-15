@@ -43,7 +43,7 @@ public class HeroStats : MonoBehaviour
     // - Reaction Time
     [Header("Reaction Time")]
     public float baseReactionTime = 0.3f;           // - Base Reaction Time in seconds    
-    public float reactionDecreasePerLevel = 0.02f;  // - Reaction Time decrease based on Level
+    public float reactionDecreasePerLevel = 0.03f;  // - Reaction Time decrease based on Level
     public float reactionTime;                      // - Current Reaction Time
 
     // - Damage Scaling
@@ -72,7 +72,11 @@ public class HeroStats : MonoBehaviour
         int level = Game.currentLevel;
 
         // - Apply Health Scaling
-        float newHealth = baseHealth + (healthIncreasePerLevel * level);
+        // - Linear Scaling
+        //float newHealth = baseHealth + (healthIncreasePerLevel * level);
+        // - Exponential Scaling
+        // - 1 = 25 | 2 = 31 | 3 = 39 | 4 = 49 | 5 = 61 | 6 = 76 | 7 = 95 | 8 = 119 | 9 = 149 | 10 = 186
+        float newHealth = baseHealth * Mathf.Pow(1.25f, level);
         if (health != null)
         {
             health.maxHealth = newHealth;
@@ -81,14 +85,26 @@ public class HeroStats : MonoBehaviour
         }
 
         // - Apply Damage Scaling
-        currentAttackDamage = baseDamage + (damageGrowthPerLevel * level);
+        // - Linear Scaling
+        //currentAttackDamage = baseDamage + (damageGrowthPerLevel * level);
+        // - Exponential Scaling
+        // - 1 = 0.25 | 2 = 0.35 | 3 = 0.49 | 4 = 0.69 | 5 = 0.97 | 6 = 1.36 | 7 = 1.91 | 8 = 2.68 | 9 = 3.75 | 10 = 5.25
+        currentAttackDamage = baseDamage + Mathf.Pow(1.4f, level);
 
         // - Apply Reaction Time Scaling, capped at 50ms
-        reactionTime = baseReactionTime - (reactionDecreasePerLevel * level);
+        // - Linear Scaling
+        //reactionTime = baseReactionTime - (reactionDecreasePerLevel * level);
+        // - Exponential Scaling
+        // - 1 = 0.3 | 2 = 0.26 | 3 = 0.22 | 4 = 0.19 | 5 = 0.16 | 6 = 0.14 | 7 = 0.12 | 8 = 0.1 | 9 = 0.09 | 10 = 0.05
+        reactionTime = Mathf.Max(0.05f, baseReactionTime * Mathf.Pow(0.85f, level));
         if (reactionTime < 0.05f) reactionTime = 0.05f;
 
         // - Apply Block Reduction Scaling
-        blockReduction = blockReductionPerLevel * level;
+        // - Linear Scaling
+        //blockReduction = blockReductionPerLevel * level;
+        // - Exponential Scaling
+        // - 1 = 26% | 2 = 34% | 3 = 44% | 4 = 57% | 5 = 74% | 6 = 96% | 7 = 120% | 8 = 120% | 9 = 120% | 10 = 120%
+        blockReduction = 0.01f * Mathf.Min(120, 20 * Mathf.Pow(1.3f, level));
     }
 
     // - Called by controller each Update to tick timers

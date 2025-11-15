@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Hero/States/Chasing", fileName = "HeroChasingState")]
@@ -15,7 +16,7 @@ public class HeroChasingState : HeroStateBehavior
     public override void OnUpdate(HeroBehaviorController hero)
     {
         // - Do nothing if combat is not active
-        if (!Game.isCombatActive) return;
+        if (!Game.isCombatActive) return;        
 
         // - Move towards player
         float direction = Mathf.Sign(hero.detection.player.transform.position.x - hero.transform.position.x);

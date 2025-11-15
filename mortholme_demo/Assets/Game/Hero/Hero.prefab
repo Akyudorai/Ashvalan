@@ -279,7 +279,7 @@ MonoBehaviour:
   stateTime: 0
   lastDecisionTime: 0
   unstuckTime: 5
-  unstuckDecreasePerLevel: 0.3
+  unstuckDecreasePerLevel: 0.4
   actionIsBuffered: 0
   detection: {fileID: 4868259648364171066}
   stats: {fileID: 2083358378010534590}
@@ -395,6 +395,7 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 64
+  disabled: 0
 --- !u!114 &2083358378010534590
 MonoBehaviour:
   m_ObjectHideFlags: 0

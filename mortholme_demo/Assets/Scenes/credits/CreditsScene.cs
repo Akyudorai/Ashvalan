@@ -7,9 +7,14 @@ public class CreditsScene : MonoBehaviour
 {
     private void Start()
     {
-        StartCoroutine(DelayTransition());
+        //StartCoroutine(DelayTransition());
     }
     
+    public void ToMenu()
+    {
+        TransitionHandler.Instance.StartSceneTransition("menu", 2f);
+    }
+
     private IEnumerator DelayTransition()
     {
         yield return new WaitForSeconds(5f);

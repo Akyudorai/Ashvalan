@@ -22,6 +22,7 @@ public class HealthScript : MonoBehaviour
     
         if (currentHealth < 0)
         {
+            isDead = true;
             OnDeath?.Invoke();
         }
     }

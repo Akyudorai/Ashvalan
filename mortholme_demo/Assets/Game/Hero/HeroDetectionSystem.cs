@@ -17,9 +17,34 @@ public class HeroDetectionSystem : MonoBehaviour
     public LayerMask groundLayer;
     public LayerMask wallLayer;
 
+    public bool disabled = false;
+
     private void Awake()
     {
         hero = GetComponent<HeroBehaviorController>();
+    }
+
+    private void Update()
+    {
+        if (pc != null && pc.health.isDead && !disabled)
+        {
+            disabled = true;
+
+            // - Subscribe to OnMoveComplete to begin Dialogue
+            hero.MoveTo(player.transform.position);
+            hero.MoveCompleted += DialogueManager.Instance.begin_hero_wins_dialogue;
+            hero.MoveCompleted += (string s) =>
+            {
+                // - Face right
+                float direction = 1f;
+
+                Vector3 heroScale = transform.localScale;
+                heroScale.x = Mathf.Abs(heroScale.x) * direction;
+                transform.localScale = heroScale;
+            };            
+
+            return;
+        }
     }
 
     // - Read recent player inputs (exposed so states can query)

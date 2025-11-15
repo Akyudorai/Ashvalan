@@ -58,9 +58,7 @@ public class HeroEvadingState : HeroStateBehavior
                 }
                 else
                 {
-                    // - Jump to avoid attack
-                    hero.rigid.AddForce(Vector3.up * hero.stats.jumpForce, ForceMode2D.Impulse);
-                    hero.ChangeState(HeroState.CHASING);
+                    hero.Block();
                 }
             }
         }
@@ -84,16 +82,14 @@ public class HeroEvadingState : HeroStateBehavior
 
                     else
                     {
-                        hero.rigid.AddForce(Vector3.up * hero.stats.jumpForce, ForceMode2D.Impulse);
-                        hero.ChangeState(HeroState.CHASING);
+                        hero.Block();
                     }
 
                 }
 
                 else
                 {
-                    hero.rigid.AddForce(Vector3.up * hero.stats.jumpForce, ForceMode2D.Impulse);
-                    hero.ChangeState(HeroState.CHASING);
+                    hero.Block();
                 }
             }
         }

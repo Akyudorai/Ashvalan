@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 using System.Collections;
+using JetBrains.Annotations;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 public class PlayerController : MonoBehaviour
 {   
@@ -26,7 +28,7 @@ public class PlayerController : MonoBehaviour
     AnimatorClipInfo[] currentAnimationClip;
     public int currentFrameIndex = 0;
     public int currentFrameMax = 0;
-
+    
     private void OnEnable()
     {
         health.OnDeath += OnDeath;
@@ -53,10 +55,11 @@ public class PlayerController : MonoBehaviour
         // - Toggle Passive Burn Ability based on Combat State
         ToggleBurnAway();
 
-        
+        Debug.Log("DialogueActive:" + Game.isDialogueActive);
+        Debug.Log("CinematicActive:" + Game.isCinematicActive);
 
         // - Freeze Player
-        if (Game.isDialogueActive || Game.isCinematicActive) return;
+        if (Game.isDialogueActive || Game.isCinematicActive || health.isDead) return;
 
         // - Prevent inverted canvas based on look direction of player
         float playerDir = Mathf.Sign(transform.localScale.x);
@@ -229,8 +232,11 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("PlayerReset")) 
         {
-            Game.isPlayerResetReady = true;
-            Game.isCinematicActive = true;
+            if (!Game.isCombatActive)
+            {
+                Game.isPlayerResetReady = true;
+                Game.isCinematicActive = true;
+            }       
         }
     }
 

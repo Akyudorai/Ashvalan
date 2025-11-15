@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public enum HeroAnimation 
 {
@@ -109,7 +110,7 @@ public class HeroBehaviorController : MonoBehaviour
 
     private void Update()
     {
-        if (stats != null && stats.isDead) return;
+        if (stats != null && stats.isDead && !detection.disabled) return;        
 
         // - Update the rigidbody Y velocity float within the animator controller in real-time 
         if (anim != null && rigid != null)
@@ -189,8 +190,10 @@ public class HeroBehaviorController : MonoBehaviour
     }
 
     private void Unstuck()
-    {
-        if (stateTime >= (unstuckTime - (unstuckDecreasePerLevel * Game.currentLevel)))
+    {        
+        if (Game.isDialogueActive || Game.isCinematicActive) return;
+
+        if (stateTime >= Mathf.Max(1f, unstuckTime * Mathf.Pow(0.8f, Game.currentLevel)))
         {
             Debug.LogWarning("HERO: I seem to be stuck.  Resetting to IDLE state.");
             ChangeState(HeroState.CHASING);
@@ -485,7 +488,7 @@ public class HeroBehaviorController : MonoBehaviour
         stats.isRolling = true;
 
         // - Start Roll Cooldown
-        stats.rollTimer = stats.rollCooldown - (stats.rollDecreasePerLevel * Game.currentLevel);
+        stats.rollTimer = Mathf.Max(0.8f, stats.rollCooldown * Mathf.Pow(0.85f, Game.currentLevel));
     }
 
     public void StopDodgeRoll()
@@ -510,7 +513,7 @@ public class HeroBehaviorController : MonoBehaviour
         stats.isAttacking = true;
         stats.MotionX = 0f;
         stats.attackCombo = 1;
-        stats.attackTimer = stats.attackCooldown - (stats.attackCooldownReductionPerLevel * Game.currentLevel);
+        stats.attackTimer = Mathf.Max(0.1f, stats.attackCooldown * Mathf.Pow(0.85f, Game.currentLevel));
         anim?.SetTrigger("Attack1");
         StartCoroutine(AnimationDelayAndEndAttack());
     }
@@ -522,7 +525,7 @@ public class HeroBehaviorController : MonoBehaviour
         stats.isAttacking = true;
         stats.MotionX = 0f;
         stats.attackCombo = 2;
-        stats.attackTimer = stats.attackCooldown - (stats.attackCooldownReductionPerLevel * Game.currentLevel);
+        stats.attackTimer = Mathf.Max(0.1f, stats.attackCooldown * Mathf.Pow(0.85f, Game.currentLevel));
         anim?.SetTrigger("Attack1");
         StartCoroutine(AnimationDelayAndEndAttack());
     }
@@ -534,7 +537,7 @@ public class HeroBehaviorController : MonoBehaviour
         stats.isAttacking = true;
         stats.MotionX = 0f;
         stats.attackCombo = 3;
-        stats.attackTimer = stats.attackCooldown - (stats.attackCooldownReductionPerLevel * Game.currentLevel);
+        stats.attackTimer = Mathf.Max(0.1f, stats.attackCooldown * Mathf.Pow(0.85f, Game.currentLevel));
         anim?.SetTrigger("Attack1");
         StartCoroutine(AnimationDelayAndEndAttack());
     }

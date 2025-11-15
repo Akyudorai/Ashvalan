@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEditor.Embree;
 
 /*
     Animation States
@@ -107,7 +106,7 @@ public class PlayerAnimationEvents : MonoBehaviour
             // - Prepare Knockback Values
             Rigidbody2D rigid = hit.GetComponent<Rigidbody2D>();
             Vector3 launchDir = (hit.transform.position - transform.position).normalized;
-            float launchForce = 25f;
+            float launchForce = 15f;
             
             // - If the Hero is blocking, perform only a slight knockback            
             if (hb.stats.isBlocking)
@@ -246,6 +245,8 @@ public class PlayerAnimationEvents : MonoBehaviour
 
                     // - TODO: Play Block SFX
                     pc.audio.PlayClip("hBlock");
+
+                    return;
                 }
 
                 else
@@ -255,22 +256,16 @@ public class PlayerAnimationEvents : MonoBehaviour
                     // - Turn off isBlocking on hero
                     hb.ChangeState(HeroState.IDLE);
                     hb.stats.isBlocking = false;                    
-
-                    // - Deal Full Damage since blocking in wrong direction
-                    hit.GetComponent<HealthScript>().DealDamage(7f);
-
-                    // - Add Target to Hit List
-                    targetsHit.Add(hit);
                 }
-
-                return;
             }
 
             // - Add Target to Hit List
             targetsHit.Add(hit);
 
             // - Deal Damage
-            hit.GetComponent<HealthScript>().DealDamage(7f);
+            hb.health.DealDamage(7f);
+
+            hb.ApplyStun(1.5f);
         }
     }
 
@@ -281,7 +276,7 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     public void StopPull()
     {
-        isPulling = false;
+        isPulling = false;        
     }
 
     public void SpellActivation() 

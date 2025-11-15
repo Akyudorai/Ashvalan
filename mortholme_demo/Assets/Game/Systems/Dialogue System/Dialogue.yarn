@@ -1,35 +1,48 @@
 ﻿title: d1
 ---
+<<toggle_boss_dialogue>>
 Boss: "A mortal at my gates? You must be lost."
+<<toggle_hero_dialogue>>
 Hero: "I'm exactly where I need to be. Show me why they fear you."
+<<toggle_boss_dialogue>>
 Boss: "Foolish mortal.."
 <<dialogue_complete>>
 ===
 
 title: d2
 ---
+<<toggle_boss_dialogue>>
 Boss: "You..?"
 Boss: "I thought I killed you already?"
+<<toggle_hero_dialogue>>
 Hero: "You did. But my death only delays your demise."
+<<toggle_boss_dialogue>>
 Boss: "Hmm.."
 <<dialogue_complete>>
 ===
 
 title: d3
 ---
+<<toggle_boss_dialogue>>
 Boss: "You again? Must you bother me so?"
+<<toggle_hero_dialogue>>
 Hero: "I go where I am needed."
+<<toggle_boss_dialogue>>
 Boss: "Or where you're doomed."
+<<toggle_hero_dialogue>>
 Hero: "Then doom will find me ready."
 <<dialogue_complete>>
 ===
 
 title: d4
 ---
+<<toggle_boss_dialogue>>
 Boss: "You've returned already?"
 Boss: "You must crave punishment."
-Player: "No.  Progress."
-Player: "Every fight teaches me something."
+<<toggle_hero_dialogue>>
+Hero: "No.  Progress."
+Hero: "Every fight teaches me something."
+<<toggle_boss_dialogue>>
 Boss: "Lessons? You mistake survival for skill."
 Boss: "Very well. You will die a very educated corpse."
 <<dialogue_complete>>
@@ -37,65 +50,92 @@ Boss: "Very well. You will die a very educated corpse."
 
 title: d5
 ---
+<<toggle_boss_dialogue>>
 Boss: "Your persistence is tiresome."
+<<toggle_hero_dialogue>>
 Hero: "Persistence beats despair."
+<<toggle_boss_dialogue>>
 Boss: "Empty words, mortal."
+<<toggle_hero_dialogue>>
 Hero: "Empty until proven true."
 <<dialogue_complete>>
 ===
 
 title: d6
 ---
+<<toggle_boss_dialogue>>
 Boss: "You.. endure more than I expected."
+<<toggle_hero_dialogue>>
 Hero: "I adapt. That's the point of fighting you."
+<<toggle_boss_dialogue>>
 Boss: "Hmph.  Perhaps you've learned a thing or two."
 Boss: "But it's not enough to beat me."
+<<toggle_hero_dialogue>>
 Hero: "Watch me."
 <<dialogue_complete>>
 ===
 
 title: d7
 ---
+<<toggle_boss_dialogue>>
 Boss: "You're persistent.  Admirable.  Annoying."
+<<toggle_hero_dialogue>>
 Hero: "Persistence is what it takes to face you.
+<<toggle_boss_dialogue>>
 Boss: "And yet.. I find no satisfaction in it."
+<<toggle_hero_dialogue>>
 Hero: "Then perhaps you'll learn something instead.
 <<dialogue_complete>>
 ===
 
 title: d8
 ---
+<<toggle_boss_dialogue>>
 Boss: "I grow weary of this dance."
+<<toggle_hero_dialogue>>
 Hero: "Then try to catch me before I end it."
+<<toggle_boss_dialogue>>
 Boss: "Try!?  I ALWAYS do."
+<<toggle_hero_dialogue>>
 Hero: "And I will always return."
 <<dialogue_complete>>
 ===
 
 title: d9
 ---
+<<toggle_boss_dialogue>>
 Boss: "I've had enough. You've become.."
 Boss: ".. UNBEARABLE!"
+<<toggle_hero_dialogue>>
 Hero: "I'm only doing what I must"
+<<toggle_boss_dialogue>>
 Boss: "I will NOT be outdone by a MORTAL!"
+<<toggle_hero_dialogue>>
 Hero: "Then try harder."
 <<dialogue_complete>>
 ===
 
 title: d10
 ---
+<<toggle_boss_dialogue>>
 Boss: "Fighting you... it's exhausting, infuriating... but enlightening."
+<<toggle_hero_dialogue>>
 Hero: "Every battle shapes us, if we let it."
+<<toggle_boss_dialogue>>
 Boss: "I thought skill and power decided victory."
 Boss: "But you've taught me that it is will that bends the outcome."
+<<toggle_hero_dialogue>>
 Hero: "Then take that lesson to heart."
+<<toggle_boss_dialogue>>
 Boss: "... I will remember it."
+<<toggle_hero_dialogue>>
 Hero: "One last time.  Let's go!"
 <<dialogue_complete>>
 ===
 
 title: game_over
 ---
+<<toggle_boss_dialogue>>
 Boss: "..." 
 Boss: "......"
 Boss: ".. he does not return."
@@ -109,4 +149,34 @@ Boss: "For the next fool brave enough to test themselves."
 Boss: "One day, someone else will take up the fight."
 Boss: "..."
 Boss: "...." 
+<<dialogue_complete>>
+===
+
+title: hero_wins_1
+---
+<<toggle_hero_dialogue>>
+Hero: "Done.  Nothing more to it."
+Hero: "Another obstacle cleared. Another step forward."
+Hero: "No time to linger.  On to the next one."
+<<dialogue_complete>>
+===
+
+title: hero_wins_2
+---
+<<toggle_hero_dialogue>>
+Hero: "That was.. tougher than I expected."
+Hero: "Took a few tries, but you fought well  You forced me to adapt."
+Hero: "I'll use these skills in the next fight."
+<<dialogue_complete>>
+===
+
+title: hero_wins_3
+---
+<<toggle_hero_dialogue>>
+Hero: "I... I didn't think I'd actually beat you."
+Hero: "Every strike, every moment.."
+Hero: "It tested me, pushed me further than I knew I could go."
+Hero: "You were a worthy fight. and I will remember it well."
+Hero: "Hopefully we can meet again one day."
+<<dialogue_complete>>
 ===

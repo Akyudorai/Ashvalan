@@ -31,6 +31,9 @@ public class GameManager : MonoBehaviour
         if (!triggerShouldBeOnAtStart)
             Game.isCinematicActive = true;
 
+        if (triggerShouldBeOnAtStart)
+            heroRespawnTrigger.SetActive(true);
+
         Game.OnTransitionComplete += OnSceneLoaded;        
     }
 
@@ -42,13 +45,9 @@ public class GameManager : MonoBehaviour
             SpawnHero();
         }
         
-        // - Toggle on Respawn Trigger if Hero is Dead
-        if (triggerShouldBeOnAtStart)
+        if (heroRespawnTrigger.activeSelf == true && Game.isCombatActive)
         {
-            if (heroObj == null && heroRespawnTrigger.activeSelf == false) 
-            {
-                heroRespawnTrigger.SetActive(true);
-            }
+            heroRespawnTrigger.SetActive(false);
         }
         
     }

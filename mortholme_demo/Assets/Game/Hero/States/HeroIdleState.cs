@@ -25,13 +25,7 @@ public class HeroIdleState : HeroStateBehavior
         if (hero.detection.distanceToPlayer > hero.stats.meleeDistance)
         {
             hero.ChangeState(HeroState.CHASING);
-        }
-
-        // - Otherwise, if within melee distance, switch to ATTACK state
-        else if (hero.detection.distanceToPlayer <= hero.stats.meleeDistance)
-        {
-            hero.ChangeState(HeroState.ATTACKING);
-        }
+        }        
     }
 
     public override void OnExit(HeroBehaviorController hero)
