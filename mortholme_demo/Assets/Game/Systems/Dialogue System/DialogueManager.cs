@@ -37,7 +37,7 @@ public class DialogueManager : MonoBehaviour
         else runner.StartDialogue($"d{(Game.currentLevel + 1).ToString()}");   
     }
 
-    public void begin_hero_wins_dialogue(string s)
+    public void begin_hero_wins_dialogue()
     {
         // - Subscribe to move to credits when dialogue complete
         YarnDialogueComplete += () =>

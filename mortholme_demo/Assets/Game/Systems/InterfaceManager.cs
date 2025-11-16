@@ -26,6 +26,8 @@ public class InterfaceManager : MonoBehaviour
     public SkillTimer chainSkillTimer;
     public SkillTimer fireblastSkillTimer;
 
+    public GameObject quitPanel;
+
     private void Awake()
     {
         Instance = this;
@@ -36,7 +38,17 @@ public class InterfaceManager : MonoBehaviour
 
     private void Update() 
     {
-        ToggleCombat();
+        ToggleCombat();             
+    }
+
+    public void ToggleQuit()
+    {
+        quitPanel.SetActive(!quitPanel.activeSelf);
+    }
+
+    public void Quit()
+    {
+        TransitionHandler.Instance.StartSceneTransition("menu", 2f); 
     }
 
     public void ToggleCombat()

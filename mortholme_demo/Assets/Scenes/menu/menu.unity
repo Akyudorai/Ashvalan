@@ -1261,9 +1261,9 @@ GameObject:
   m_Component:
   - component: {fileID: 151796846}
   - component: {fileID: 151796845}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground Collider
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19574,7 +19574,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 503782885}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: StartGame
+        m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -22294,7 +22294,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 100
   m_TargetDisplay: 0
 --- !u!224 &1528815458
 RectTransform:
@@ -26168,6 +26168,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2013109616727382121, guid: d7b5514dc319c8f499d87d83767919e5, type: 3}
+      propertyPath: isStatic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8572464907940545419, guid: d7b5514dc319c8f499d87d83767919e5, type: 3}
       propertyPath: m_Name
       value: Hero

@@ -64,6 +64,8 @@ public class HeroBehaviorController : MonoBehaviour
     public delegate void OnMovementComplete(string command);
     public OnMovementComplete MoveCompleted;
 
+    public bool isStatic = false;
+
     private void OnEnable()
     {
         // - Ensure references exist
@@ -99,6 +101,9 @@ public class HeroBehaviorController : MonoBehaviour
         // - Apply scaling through stats system
         stats?.ApplyScaling();
 
+        // - For re-use in menu, disable all AI behavior
+        if (isStatic) return;
+
         // - Initialize Active Asset for current state
         SetActiveStateAsset(currentState);
         lastDecisionTime = 0f;
@@ -110,7 +115,7 @@ public class HeroBehaviorController : MonoBehaviour
 
     private void Update()
     {
-        if (stats != null && stats.isDead && !detection.disabled) return;        
+        if (stats != null && stats.isDead || detection.disabled) return;        
 
         // - Update the rigidbody Y velocity float within the animator controller in real-time 
         if (anim != null && rigid != null)
@@ -121,6 +126,9 @@ public class HeroBehaviorController : MonoBehaviour
 
         // - Update Animator Parameters
         HandleAnimator();
+
+        // - For re-use in menu, disable all AI behavior
+        if (isStatic) return;
 
         // - Unstuck Timer
         stateTime += Time.deltaTime;
@@ -501,6 +509,9 @@ public class HeroBehaviorController : MonoBehaviour
 
         // - Set IsRolling to False
         stats.isRolling = false;
+
+        // - Set State to Chasing
+        ChangeState(HeroState.CHASING);
     }
 
 

@@ -55,9 +55,6 @@ public class PlayerController : MonoBehaviour
         // - Toggle Passive Burn Ability based on Combat State
         ToggleBurnAway();
 
-        Debug.Log("DialogueActive:" + Game.isDialogueActive);
-        Debug.Log("CinematicActive:" + Game.isCinematicActive);
-
         // - Freeze Player
         if (Game.isDialogueActive || Game.isCinematicActive || health.isDead) return;
 
@@ -70,6 +67,9 @@ public class PlayerController : MonoBehaviour
         // - If motion input is detected, move the player accordingly.
         if (MotionX != 0 && CanMove)
             transform.position += transform.right * MotionX * MoveSpeed * Time.deltaTime;    
+
+        // - Clamp the X position of the player so they cannot walk off screen
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -21.5f, 22.5f), transform.position.y, transform.position.z);
 
         // - Update Animator Parameters        
         HandleAnimator();    

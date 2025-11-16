@@ -20,7 +20,7 @@ public class TransitionHandler : MonoBehaviour
     {
         if (fadeImage == null)
         {
-            onComplete?.Invoke();
+            onComplete?.Invoke();            
             yield break;
         }
 

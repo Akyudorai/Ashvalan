@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
         Game.OnTransitionComplete = null;
 
         // - Start Opening Cinematic        
-        SpawnHero();
+        SpawnHero();       
     }
 
     public IEnumerator EndCinematic()
@@ -160,12 +160,18 @@ public class GameManager : MonoBehaviour
     }
 
     public void GameOver()
-    {
+    {        
         DialogueManager.YarnDialogueComplete += () =>
         {            
             TransitionHandler.Instance.StartSceneTransition("credits", 2f);                                    
         };
 
         DialogueManager.Instance.begin_dialogue("game_over");
+    }
+
+    public IEnumerator StartHeroWin()
+    {
+        yield return new WaitForSeconds(2f);
+        DialogueManager.Instance.begin_hero_wins_dialogue();
     }
 }

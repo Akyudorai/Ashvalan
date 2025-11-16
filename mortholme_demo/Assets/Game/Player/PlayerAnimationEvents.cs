@@ -36,7 +36,7 @@ public class PlayerAnimationEvents : MonoBehaviour
     private void Update()
     {
         // - Handle the pull effect of the chain attack
-        if (animationState == 4 && isPulling)
+        if (isPulling)
         {
             foreach (GameObject hit in targetsHit)
             {
@@ -54,6 +54,7 @@ public class PlayerAnimationEvents : MonoBehaviour
     public void AttackStarted(int i)
     {
         currentAttack = i;
+        animationState = 2;
         float impactTime =
             (i == 1) ? 0.27f :  // - ~0.27s and ~0.25s between first and second hitbox triggers
             (i == 2) ? 0.40f :  // - ~0.4s before hitbox triggers
@@ -81,8 +82,15 @@ public class PlayerAnimationEvents : MonoBehaviour
     {
         animationState = i;
 
+        Debug.Log("Setting Animation State To: " + i);
+
         // - Clear the Hit List at the start of each animation
         targetsHit.Clear();
+    }
+
+    public void SetAttackState(int i)
+    {
+        currentAttack = i;
     }
 
     public void StartSpearDash() 
@@ -170,7 +178,7 @@ public class PlayerAnimationEvents : MonoBehaviour
             Rigidbody2D rigid = hit.GetComponent<Rigidbody2D>();
             Vector3 launchDir = (hit.transform.position - transform.position).normalized;
             launchDir += Vector3.up * 0.4f;
-            float launchForce = 25f;
+            float launchForce = 35f;
 
             // - If the Hero is blocking, perform only a slight knockback            
             if (hb.stats.isBlocking)
@@ -301,16 +309,16 @@ public class PlayerAnimationEvents : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.tag == "Hero")
-        {
-            switch (animationState)
+        {            
+            switch (currentAttack)
             {
-                case 2: // - Attacking
+                case 1: // - Attacking
                     AttackHitResponse(col.gameObject);
                     break;
-                case 3: // - Spear
+                case 2: // - Spear
                     SpearHitResponse(col.gameObject);
                     break;
-                case 4: // - Chain
+                case 3: // - Chain
                     ChainHitResponse(col.gameObject);
                     break;
             }
