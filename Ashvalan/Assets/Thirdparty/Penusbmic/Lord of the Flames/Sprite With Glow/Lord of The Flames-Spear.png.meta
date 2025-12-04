@@ -1,0 +1,496 @@
+fileFormatVersion: 2
+guid: dacb844c7d0dae24c819930716db5610
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Lord of The Flames-Spear_0
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 1
+        width: 64
+        height: 46
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93f75fda837667041b5260253c517e9b
+      internalID: -798805461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lord of The Flames-Spear_1
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 1
+        width: 64
+        height: 46
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb9ecb17186fa4549aa9ecdf33b85d5e
+      internalID: 597406617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lord of The Flames-Spear_2
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 1
+        width: 64
+        height: 46
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3744fb97f6cb3ce4f9c74f600aa1e7aa
+      internalID: 842115259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lord of The Flames-Spear_3
+      rect:
+        serializedVersion: 2
+        x: 435
+        y: 1
+        width: 64
+        height: 46
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94725881e74912947b6cc4b674bae5ea
+      internalID: 1221126623
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lord of The Flames-Spear_4
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 1
+        width: 64
+        height: 46
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9059855caa033242867192237a8a9ca
+      internalID: -739740441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lord of The Flames-Spear_5
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 1
+        width: 115
+        height: 46
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a857b7d04b402c444a35b59e8210cb8b
+      internalID: 287250938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lord of The Flames-Spear_7
+      rect:
+        serializedVersion: 2
+        x: 895
+        y: 1
+        width: 118
+        height: 46
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9cc4cdfd6439d4c43b9c5c0247feefd4
+      internalID: 1266317152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lord of The Flames-Spear_9
+      rect:
+        serializedVersion: 2
+        x: 1046
+        y: 1
+        width: 111
+        height: 46
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67d675d20eb2a2d4f934cddbc1bb0613
+      internalID: 805329113
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lord of The Flames-Spear_12
+      rect:
+        serializedVersion: 2
+        x: 1492
+        y: 1
+        width: 95
+        height: 46
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f16d3d21bacf48d4186f8bfa562d9d51
+      internalID: 1753808864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lord of The Flames-Spear_13
+      rect:
+        serializedVersion: 2
+        x: 1645
+        y: 1
+        width: 84
+        height: 46
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 867e64d7803c8124cae74f53d0c6770a
+      internalID: -630015503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lord of The Flames-Spear_14
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1
+        width: 83
+        height: 46
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c9b0716203ca2042949db9da27ce832
+      internalID: -581665066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lord of The Flames-Spear_15
+      rect:
+        serializedVersion: 2
+        x: 1948
+        y: 1
+        width: 64
+        height: 46
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d989032d9ad9cae4ebfca7ec43901e41
+      internalID: -1319812254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lord of The Flames-Spear_16
+      rect:
+        serializedVersion: 2
+        x: 2094
+        y: 1
+        width: 64
+        height: 46
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 869804614c38f9e479cd1d39767a2d13
+      internalID: 905851624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lord of The Flames-Spear_20
+      rect:
+        serializedVersion: 2
+        x: 1193
+        y: 1
+        width: 105
+        height: 46
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc6fe459a34c3e54c83326412620e773
+      internalID: -154196037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lord of The Flames-Spear_24
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 1
+        width: 99
+        height: 46
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ba89a6a14d205942ae0956d76aafd26
+      internalID: 500728500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 6f0a07754accf5f4f8db5e0e68e4e7cd
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":13.0,"y":1.0},"gridSpriteSize":{"x":108.0,"y":47.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":64.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Lord of The Flames-Spear_0: -798805461
+      Lord of The Flames-Spear_1: 597406617
+      Lord of The Flames-Spear_10: 643555268
+      Lord of The Flames-Spear_11: -1518458759
+      Lord of The Flames-Spear_12: 1753808864
+      Lord of The Flames-Spear_13: -630015503
+      Lord of The Flames-Spear_14: -581665066
+      Lord of The Flames-Spear_15: -1319812254
+      Lord of The Flames-Spear_16: 905851624
+      Lord of The Flames-Spear_17: -1079626464
+      Lord of The Flames-Spear_18: -322918458
+      Lord of The Flames-Spear_19: 684931352
+      Lord of The Flames-Spear_2: 842115259
+      Lord of The Flames-Spear_20: -154196037
+      Lord of The Flames-Spear_21: -947269344
+      Lord of The Flames-Spear_22: -1216850420
+      Lord of The Flames-Spear_23: -761099529
+      Lord of The Flames-Spear_24: 500728500
+      Lord of The Flames-Spear_25: 1493462654
+      Lord of The Flames-Spear_26: -1535393038
+      Lord of The Flames-Spear_27: 313070716
+      Lord of The Flames-Spear_28: 1665838791
+      Lord of The Flames-Spear_29: 268062281
+      Lord of The Flames-Spear_3: 1221126623
+      Lord of The Flames-Spear_30: 337620217
+      Lord of The Flames-Spear_31: -248940197
+      Lord of The Flames-Spear_32: 961348330
+      Lord of The Flames-Spear_33: 1702759071
+      Lord of The Flames-Spear_34: -820007473
+      Lord of The Flames-Spear_35: -857853552
+      Lord of The Flames-Spear_36: 1924071573
+      Lord of The Flames-Spear_37: 1159178373
+      Lord of The Flames-Spear_38: -1969382460
+      Lord of The Flames-Spear_39: -1679861785
+      Lord of The Flames-Spear_4: -739740441
+      Lord of The Flames-Spear_40: -106307675
+      Lord of The Flames-Spear_41: 370849358
+      Lord of The Flames-Spear_42: 28408050
+      Lord of The Flames-Spear_43: -2139984906
+      Lord of The Flames-Spear_44: -948273933
+      Lord of The Flames-Spear_45: -99360101
+      Lord of The Flames-Spear_46: 1006339575
+      Lord of The Flames-Spear_5: 287250938
+      Lord of The Flames-Spear_6: 934165239
+      Lord of The Flames-Spear_7: 1266317152
+      Lord of The Flames-Spear_8: 1023576540
+      Lord of The Flames-Spear_9: 805329113
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
